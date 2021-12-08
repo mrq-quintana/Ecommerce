@@ -37,10 +37,7 @@ app.use((req,res,next)=>{
 app.use(express.static(__dirname+'/public'));
 app.use('/api/productos',products);
 app.use('/api/carrito',cart);
-app.use((req,res,next)=>{
-    res.status(404).send({error:-1,message:"La ruta que desea ingresar no existe"})
-    console.log("La ruta que desea ingresar no existe");
-})
+
 
 //GET
 app.get('/api/productRandom', (req,res)=>{
@@ -70,6 +67,11 @@ app.get('/views/articulos',authAdmin,(req,res)=>{
         // console.log(infoObj);
         res.render('articulos',infoObj)
     })
+})
+
+app.use((req,res,next)=>{
+    res.status(404).send({error:-1,message:"La ruta que desea ingresar no existe"})
+    console.log("La ruta que desea ingresar no existe");
 })
 //SOCKET
 let mensajes = [];
