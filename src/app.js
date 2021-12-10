@@ -57,7 +57,7 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
     res.send(files)
 })
 //HANDLEBARS
-app.get('/views/articulos',authAdmin,(req,res)=>{
+app.get('/views/articulos',(req,res)=>{
     contenedor.getAll().then(result=>{
         let info = result.product;
         // console.log(info);
@@ -69,6 +69,7 @@ app.get('/views/articulos',authAdmin,(req,res)=>{
     })
 })
 
+//RUTA NO AUTORIZAADA
 app.use((req,res,next)=>{
     res.status(404).send({error:-1,message:"La ruta que desea ingresar no existe"})
     console.log("La ruta que desea ingresar no existe");

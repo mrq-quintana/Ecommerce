@@ -4,12 +4,6 @@ const router = express.Router();
 const carrito = new Carrito();
 
 //GET
-router.get('/', (req,res)=>{
-    carrito.getAll().then((result)=>{
-        res.send(result.product);
-        console.log(result.message);
-    })
-})
 router.get('/:id/productos', (req,res)=>{
     const usuarioId = parseInt(req.params.id);
     carrito.getById(usuarioId).then((result)=>{
@@ -34,19 +28,18 @@ router.delete('/:id/productos/:id_prod', (req,res)=>{
         
     })
 })
-
 //POST
 router.post('/:id/productos',(req, res)=>{
     const idCarrito = parseInt(req.params.id);
-    let idAgregar = req.body;
+    let idAgregar = req.body.id; 
     carrito.addToCart(idAgregar,idCarrito).then(result=>{
         res.send(result);
 
     })
 })
 router.post('/',(req, res)=>{
-    let productoAgregar = req.body;
-    carrito.saveCart(productoAgregar).then(result=>{
+    // let productoAgregar = req.body;
+    carrito.saveCart().then(result=>{
         res.send(result);
 
     })

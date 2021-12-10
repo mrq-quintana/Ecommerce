@@ -49,12 +49,21 @@ function enviarForm(event){
     }).then(result=>{
         return result.json();
     }).then(json=>{
-        Swal.fire({
-            title:'Guardado',
-            text:json.message,
-            icon:'success',
-            timer:2000,
-        })
+        if(json.status = 403){
+            Swal.fire({
+                title:'No se puede guardar',
+                text:json.message,
+                icon:'error',
+                timer:4000,
+            })
+        } else{
+            Swal.fire({
+                title:'Guardado',
+                text:json.message,
+                icon:'success',
+                timer:2000,
+            })
+        }
     })
     document.getElementById('formProduct').reset();
 }

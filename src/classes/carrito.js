@@ -5,66 +5,45 @@ const rutaProductos = __dirname+'/files/products.txt'
 const rutaCarrito = './src/files/carrito.txt'
 
 class Carrito {
-    async saveCart(productoAgregar) {
+    async saveCart() {
       try {
         let cart = await fs.promises.readFile(rutaCarrito, "utf-8");
         let cartJson = JSON.parse(cart);
-        let info = await fs.promises.readFile(rutaProductos, "utf-8");
-        let infoJson = JSON.parse(info);
-        let idProducto = [];
-        productoAgregar.id.forEach(element => { 
-          idProducto.push(infoJson.find(i=> i.id===element))
-        }); 
-          if (!idProducto) {
-            return {message: 'El producto no se puede agregar al carrito'};
-          }else{
-            let timestamp = Date.now();
-            let time = new Date(timestamp);
-            let carrito = {
+        let timestamp = Date.now();
+        let time = new Date(timestamp);
+        
+        let carrito = {
               idCarrito: parseInt(cartJson.length + 1),
               timestamp: time.toLocaleDateString() +" , "+ time.toTimeString().split(" ")[0],
-              productos: idProducto
-            };    
-
-            cartJson.push(carrito);   
+              productos: []
+            }; 
+            cartJson.push(carrito);
                 try {
                   await fs.promises.writeFile(rutaCarrito, JSON.stringify(cartJson, null, 2));
                   return {message: `Carrito creado con Id ${carrito.idCarrito}`};
-                  } 
-                catch (error){
-                  return {message: "No se pudo agregar producto " + error};
-                }
-          }
+                } 
+                catch (error){ return {message: "No se pudo agregar producto " + error};}
+          
         } 
-        catch (error){
-          console.log(error)
-      }
-    }
+        catch (error){ console.log(error)}
+        }   
     async addToCart(idAgregar,idCarrito){
       let cart = await fs.promises.readFile(rutaCarrito, "utf-8");
       let cartJson = JSON.parse(cart);
       let info = await fs.promises.readFile(rutaProductos, "utf-8");
-      let infoJson = JSON.parse(info);
-      
+      let infoJson = JSON.parse(info);     
       let cartId = cartJson.find((i) => i.idCarrito === idCarrito);
-
-      if (cartId){  
-       idAgregar.id.map(id => { 
-            let idAdd= infoJson.find(i=> i.id===id)
-              if(idAdd!==undefined){
-                cartId.productos.push(idAdd);}
-        });
-
-
+      let idAdd= infoJson.find((i)=> i.id === idAgregar);
+    
+      if (cartId && idAdd!==undefined){  
+          cartId.productos.push(idAdd);
           await fs.promises.writeFile(rutaCarrito, JSON.stringify(cartJson, null, 2));
-
-          return { message: "Id agregado correctamente al carrito "+idCarrito+" "};
-        
+          return { message: "Id agregado correctamente al carrito "+idCarrito+" "};        
       }else{
-        return { message: "El carrito no existe "};
+        return { message: "El carrito o el producto no existe "};
       }
 
-      }
+    }
     async getAll() {
       let info = await fs.promises.readFile(rutaCarrito, "utf-8");
       let infoJson = JSON.parse(info);
