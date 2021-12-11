@@ -49,7 +49,8 @@ function enviarForm(event){
     }).then(result=>{
         return result.json();
     }).then(json=>{
-        if(json.status = 403){
+        console.log(json.error);
+        if(json.error === -2){
             Swal.fire({
                 title:'No se puede guardar',
                 text:json.message,
