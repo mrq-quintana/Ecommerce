@@ -4,10 +4,11 @@ import cors from 'cors';
 import upload from './service/upload.js';
 import Contenedor from './classes/contenedor.js';
 import products from './routes/products.js';
-import cart from './routes/cart.js'
+import cart from './routes/cart.js';
 import __dirname from './utils.js';
-import {Server} from 'socket.io'
-import { authAdmin } from './utils.js';
+import {Server} from 'socket.io';
+import ClassProducts from './service/classProducts.js';
+
 
 const app = express();
 const PORT = process.env.PORT||8080;
@@ -15,6 +16,7 @@ const server = app.listen(PORT,()=>{
     console.log("Escuchando en puerto " + PORT)
 });
 const contenedor = new Contenedor();
+const productos = new ClassProducts();
 
 export const io = new Server(server);
 
@@ -22,7 +24,7 @@ app.engine('handlebars', engine());
 app.set('views',__dirname+'/viewsHandlebars');
 app.set('view engine','handlebars');
 
-const admin = false;
+const admin = true;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
@@ -79,7 +81,7 @@ let mensajes = [];
 io.on('connection', async socket=>{
     console.log(`El socket ${socket.id} se ha conectado`);
         socket.emit('log',mensajes);
-    let products = await contenedor.getAll();
+    let products = await productos.getAll();
         socket.emit('actualiza', products);    
         socket.on('msj', data=>{
             mensajes.push(data)

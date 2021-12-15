@@ -1,22 +1,24 @@
 import express from 'express';
 import upload from '../service/upload.js';
 import Contenedor from '../classes/contenedor.js';
+import ClassProducts from '../service/classProducts.js';
 import { io } from '../app.js';
 import { authAdmin } from '../utils.js'
 const router = express.Router();
 const contenedor = new Contenedor();
+const products = new ClassProducts();
 
 //GET
 router.get('/', (req,res)=>{
-    contenedor.getAll().then((result)=>{
-        res.send(result.product);
+    products.getAll().then((result)=>{
+        res.send(result);
         console.log(result.message);
     })
 })
 router.get('/:id', (req,res)=>{
-    const usuarioId = parseInt(req.params.id);
-    contenedor.getById(usuarioId).then((result)=>{
-        res.send(result.product);
+    const id = parseInt(req.params.id);
+    products.getById(id).then((result)=>{
+        res.send(result);
         console.log(result.message);
     })
 })
@@ -24,12 +26,13 @@ router.get('/:id', (req,res)=>{
 router.post('/',authAdmin,upload.single('image'),(req, res)=>{
     let productoAgregar = req.body;
     productoAgregar.price = parseInt(productoAgregar.price);
+    console.log(req);
     let thumbnail = req.protocol+"://"+req.hostname+":8080"+'/images/'+req.file.filename;
     productoAgregar.thumbnail = thumbnail;
-    contenedor.saveProduct(productoAgregar).then(result=>{
+    products.saveProduct(productoAgregar).then(result=>{
         res.send(result);
         if(result){
-            contenedor.getAll().then(result=>{
+            products.getAll().then(result=>{
                 io.emit('actualiza',result);
             })
         }

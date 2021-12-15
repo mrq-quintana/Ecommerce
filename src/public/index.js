@@ -1,7 +1,8 @@
 const socket = io();
 
 socket.on('actualiza', data=>{
-    let prod = data.product;
+    let prod = data.products;
+    console.log(data);
     fetch('templates/productsTable.handlebars').then(string=> string.text()).then(template=>{
         const plantilla = Handlebars.compile(template);
         const objPlantilla={
