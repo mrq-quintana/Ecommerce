@@ -1,12 +1,6 @@
 import knex from "knex";
-import __dirname from "./utils.js";
 
-export const database = knex({
-    client:'sqlite3',
-    connection:{filename: __dirname+'/db/relationaldb.sqlite'}
-});
-
-export const db = knex({
+const db = knex({
     client:'mysql',
     version:'10.4.22',
     connection:{
@@ -19,3 +13,4 @@ export const db = knex({
     pool: {min:0,max:10}
 });
 
+export default db;

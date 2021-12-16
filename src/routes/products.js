@@ -26,7 +26,6 @@ router.get('/:id', (req,res)=>{
 router.post('/',authAdmin,upload.single('image'),(req, res)=>{
     let productoAgregar = req.body;
     productoAgregar.price = parseInt(productoAgregar.price);
-    console.log(req);
     let thumbnail = req.protocol+"://"+req.hostname+":8080"+'/images/'+req.file.filename;
     productoAgregar.thumbnail = thumbnail;
     products.saveProduct(productoAgregar).then(result=>{
@@ -38,22 +37,23 @@ router.post('/',authAdmin,upload.single('image'),(req, res)=>{
         }
     })
 })
-//DELETE
-router.delete('/:id',authAdmin,(req,res)=>{
-    const usuarioId = parseInt(req.params.id);
-    contenedor.deleteById(usuarioId).then((result)=>{
-        res.send(result.product);
-        console.log(result.message);
-    })
-})
 //PUT
 router.put('/:pid',authAdmin,(req,res)=>{
     let body = req.body;
     let id = parseInt(req.params.pid);
-    contenedor.updateProduct(id,body).then(result=>{
+    products.updateProduct(id,body).then(result=>{
         res.send(result);
         console.log(result.message);
     })
 })
+//DELETE
+router.delete('/:id',authAdmin,(req,res)=>{
+    const usuarioId = parseInt(req.params.id);
+    products.deleteById(usuarioId).then((result)=>{
+        res.send(result.products);
+        console.log(result.message);
+    })
+})
+
 
 export default router;
