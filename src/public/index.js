@@ -2,7 +2,6 @@ const socket = io();
 
 socket.on('actualiza', data=>{
     let prod = data.products;
-    console.log(data);
     fetch('templates/productsTable.handlebars').then(string=> string.text()).then(template=>{
         const plantilla = Handlebars.compile(template);
         const objPlantilla={
@@ -19,20 +18,22 @@ let user = document.getElementById('user');
 input.addEventListener('keyup',(e)=>{
     if(e.key==="Enter"){
         if(e.target.value){
-            let timestamp = Date.now();
-            let time = new Date(timestamp);
-            socket.emit('msj', { user:user.value, message:e.target.value, hoy:time.toLocaleDateString() , hora:time.toTimeString().split(" ")[0]})
+            let chat ={ 
+                usuario:user.value, 
+                mensaje:e.target.value, 
+            }
+            socket.emit('msj', chat)
         }else{
             console.log('Mensaje vacio')
         }
     }
 })
 
-socket.on('log',data=>{
+socket.on('log',mensajes=>{
     let p =document.getElementById('log');
-    let todosMsj = data.map(message=>{
+    let todosMsj = mensajes.map(message=>{
         return `<div>
-                    <span>${message.user} dice: ${message.message}, ${message.hoy}, ${message.hora}</span>
+                    <span><p>${message.usuario} dice: ${message.mensaje}</p><p> ${message.created_at}</p></span>
                 </div>`
     }).join('');
     p.innerHTML = todosMsj;

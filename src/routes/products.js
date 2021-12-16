@@ -4,6 +4,7 @@ import Contenedor from '../classes/contenedor.js';
 import ClassProducts from '../service/classProducts.js';
 import { io } from '../app.js';
 import { authAdmin } from '../utils.js'
+
 const router = express.Router();
 const contenedor = new Contenedor();
 const products = new ClassProducts();

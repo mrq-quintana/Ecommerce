@@ -3,7 +3,7 @@ import __dirname from "./utils.js";
 
 export const database = knex({
     client:'sqlite3',
-    connection:{filename: __dirname+'/db/relationaldb.sqlite'}
+    connection:{filename: __dirname+'/db/ecommerce.sqlite'}
 });
 
 export const db = knex({
