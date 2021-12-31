@@ -2,19 +2,17 @@ import express from 'express';
 import {engine} from 'express-handlebars';
 import cors from 'cors';
 import upload from './service/upload.js';
-import Contenedor from './classes/contenedor.js';
+import {productos} from './daos/index.js'
 import products from './routes/products.js';
 import cart from './routes/cart.js'
 import __dirname from './utils.js';
 import {Server} from 'socket.io'
-import { authAdmin } from './utils.js';
 
 const app = express();
 const PORT = process.env.PORT||8080;
 const server = app.listen(PORT,()=>{
     console.log("Escuchando en puerto " + PORT)
 });
-const contenedor = new Contenedor();
 
 export const io = new Server(server);
 
@@ -22,7 +20,7 @@ app.engine('handlebars', engine());
 app.set('views',__dirname+'/viewsHandlebars');
 app.set('view engine','handlebars');
 
-const admin = false;
+const admin = true;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
@@ -39,14 +37,6 @@ app.use('/api/productos',products);
 app.use('/api/carrito',cart);
 
 
-//GET
-app.get('/api/productRandom', (req,res)=>{
-    contenedor.getRandom().then((result)=>{
-        res.send(result.product);
-        console.log(result.message);
-    })
-    
-})
 //POST
 app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
     const files = req.file; 
@@ -56,19 +46,16 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
     }
     res.send(files)
 })
-//HANDLEBARS
+//VISTA ARTICULOS
 app.get('/views/articulos',(req,res)=>{
-    contenedor.getAll().then(result=>{
+    productos.getAll().then(result=>{
         let info = result.product;
-        // console.log(info);
         let infoObj ={
             productos:info
-        }
-        // console.log(infoObj);
+        }       
         res.render('articulos',infoObj)
     })
 })
-
 //RUTA NO AUTORIZAADA
 app.use((req,res,next)=>{
     res.status(404).send({error:-1,message:"La ruta que desea ingresar no existe"})
@@ -79,14 +66,12 @@ let mensajes = [];
 io.on('connection', async socket=>{
     console.log(`El socket ${socket.id} se ha conectado`);
         socket.emit('log',mensajes);
-    let products = await contenedor.getAll();
+    let products = await productos.getAll();
         socket.emit('actualiza', products);    
         socket.on('msj', data=>{
             mensajes.push(data)
         io.emit('log',mensajes);
     })
-
-
 })
 
 

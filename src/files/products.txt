@@ -121,12 +121,11 @@
   },
   {
     "id": 13,
-    "timestamp": "11/12/2021 , 13:01:54",
-    "title": "Leon Ng",
+    "timestamp": "31/12/2021 , 12:02:08",
+    "title": "Leon 7",
     "price": 1500,
-    "description": "Leon Nego con borde rojo",
-    "codigo": "LeonNR",
-    "stock": "8",
-    "thumbnail": "http://localhost:8080/images/1639238514247Lyon_Red_1.jpeg"
+    "description": "Descripcion actualizada",
+    "codigo": "Leon777",
+    "stock": "200"
   }
 ]
