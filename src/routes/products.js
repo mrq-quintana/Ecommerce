@@ -9,12 +9,12 @@ const router = express.Router();
 //GET
 router.get('/', (req,res)=>{
     productos.getAll().then((result)=>{
-        res.send(result.product);
+        res.send(result);
         console.log(result.message);
     })
 })
 router.get('/:id', (req,res)=>{
-    const usuarioId = parseInt(req.params.id);
+    const usuarioId = req.params.id;
     productos.getById(usuarioId).then((result)=>{
         res.send(result.product);
         console.log(result.message);
@@ -22,9 +22,9 @@ router.get('/:id', (req,res)=>{
 })
 //DELETE
 router.delete('/:id',authAdmin,(req,res)=>{
-    const usuarioId = parseInt(req.params.id);
+    const usuarioId = req.params.id;
     productos.deleteById(usuarioId).then((result)=>{
-        res.send(result.product);
+        res.send(result);
         console.log(result.message);
     })
 })
@@ -38,8 +38,8 @@ router.delete('/', (req,res)=>{
 router.post('/',authAdmin,upload.single('image'),(req, res)=>{
     let productoAgregar = req.body;
     productoAgregar.price = parseInt(productoAgregar.price);
-    let thumbnail = req.protocol+"://"+req.hostname+":8080"+'/images/'+req.file.filename;
-    productoAgregar.thumbnail = thumbnail;
+    // let thumbnail = req.protocol+"://"+req.hostname+":8080"+'/images/'+req.file.filename;
+    // productoAgregar.thumbnail = thumbnail;
     productos.saveProduct(productoAgregar).then(result=>{
         res.send(result);
         if(result){

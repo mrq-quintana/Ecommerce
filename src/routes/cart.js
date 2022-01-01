@@ -29,7 +29,6 @@ router.delete('/:id/productos/:id_prod', (req,res)=>{
 router.post('/',(req, res)=>{
     carrito.saveCart().then(result=>{
         res.send(result);
-
     })
 })
 router.post('/:id',(req, res)=>{

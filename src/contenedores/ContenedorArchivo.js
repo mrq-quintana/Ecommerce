@@ -14,7 +14,7 @@ export default class ContenedorArchivo{
             if (infoJson !== []) {
             return { product: infoJson, message: "Estos son todos los productos"};
             } else {
-            return {product: "", message: "No se encontraron productos",};
+            return {message: "No se encontraron productos",};
             }
         } catch (error) {
             return {
@@ -23,23 +23,23 @@ export default class ContenedorArchivo{
         }
     }
     async getById(id){
-    try{
-        let info = await fs.promises.readFile(this.url, "utf-8");
-        let infoJson = JSON.parse(info);
-        let infoId = infoJson.find((i) => i.id === id);
+      try{
+          let info = await fs.promises.readFile(this.url, "utf-8");
+          let infoJson = JSON.parse(info);
+          let infoId = infoJson.find((i) => i.id === id);
 
-        if (infoId) {
-        return { product: infoId, message: "Id encontrado" };
-        } else {
-        return {
-            message: "No se pudo encontrar Id ",
-        };
-        }
-    } catch(error){
-        return {
-            message: "No se pudo realizar accion" + error,
-        };
-    }
+          if (infoId) {
+          return { product: infoId, message: "Id encontrado" };
+          } else {
+          return {
+              message: "No se pudo encontrar Id ",
+          };
+          }
+      } catch(error){
+          return {
+              message: "No se pudo realizar accion" + error,
+          };
+      }
 
     }
     //DELETES
@@ -68,6 +68,8 @@ export default class ContenedorArchivo{
             if (infoJson !== []) {
               fs.promises.writeFile(this.url,JSON.stringify((infoJson = []), null, 2));
               return { message: "Todos los productos fueron eliminados"};
+            } else{
+              return { message: "No se puede eliminar"};
             }
         }catch(error){
             return {
