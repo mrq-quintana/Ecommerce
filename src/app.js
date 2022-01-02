@@ -34,7 +34,7 @@ app.use((req,res,next)=>{
 })
 app.use(express.static(__dirname+'/public'));
 app.use('/api/productos',products);
-app.use('/api/carrito',cart);
+app.use('/api/carritos',cart);
 
 
 //POST

@@ -6,6 +6,7 @@ mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}
 export default class ContenedorMongo{
     constructor(collection,schema,timestamps){
         this.collection = mongoose.model(collection, new mongoose.Schema(schema,timestamps));
+
     }
     //READS
     async getAll(){
@@ -22,7 +23,7 @@ export default class ContenedorMongo{
     }
     async getById(id){
         try{
-            let doc = await this.collection.find({_id:id});
+            let doc = await this.collection.find({_id:id}).populate('productos');
             if (doc) {
             return { product: doc, message: "Id encontrado"};
             } else {
@@ -50,7 +51,6 @@ export default class ContenedorMongo{
     async deleteAll(){
         try{
             let doc = await this.collection.find().count();
-            console.log(doc);
             if(doc !== 0){
                 await this.collection.deleteMany({});
                 return { message: "Todos los productos fueron eliminados"};
@@ -60,6 +60,19 @@ export default class ContenedorMongo{
         } catch(error){ 
             return {
                 message: "No se pudo eliminar " + error};
+        }
+    }
+    async deleteProductById(idCarrito,id_prod) {
+        try{
+            let doc = await this.collection.find({$and:[{_id:idCarrito},{productos:id_prod}]}).count();
+            if (doc) {
+                let document = await this.collection.updateOne({_id:idCarrito},{$pull:{productos:id_prod}});
+                return { product: document, message: "Id encontrado"};
+            } else {
+                return {message: "No se pudo encontrar Id "};
+            }
+        } catch(error){
+                return {message: "No se pudo realizar accion " + error};
         }
     }
     //CREATES
@@ -79,11 +92,35 @@ export default class ContenedorMongo{
     }
     async saveCart() {
         try {
-          let cart = await this.collection.create();
-          console.log(cart);
-          return {message: "Carrito creado" };     
+          let cart = await this.collection.insertMany();
+          return {message: "Carrito creado con ID "+ cart[0]._id};     
         } catch (error){
-            console.log(error)
+            return {message: "No se pudo agregar carrito " + error};
+        }
+    }
+    //UPDATES
+    async updateProduct(id, body) {    
+        try{
+            if(await this.collection.countDocuments({_id:id}) === 1){
+                await this.collection.updateOne({_id:id},body);
+                return { message: id+" modificado correctamente"};
+            }else{
+                return { message: "No hay item para modificar"};
+            } 
+        }catch(error){
+            return {message: "No se pudo agregar Producto " + error};
+        }
+    }
+    async addToCart(idAgregar,idCarrito) {
+        try{
+            if(await this.collection.count({_id:idCarrito})){
+             let doc = await this.collection.updateOne({_id:idCarrito},{$push:{productos:idAgregar}});
+            return { product:doc, message: "Id agregado correctamente al carrito "+idCarrito+" "};
+            }else{
+                return { message: "No se puede agregar producto"};
+            } 
+        }catch(error){
+            return {message: "No se pudo agregar Producto " + error};
         }
     }
 

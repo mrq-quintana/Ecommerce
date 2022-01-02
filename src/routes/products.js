@@ -51,8 +51,8 @@ router.post('/',authAdmin,upload.single('image'),(req, res)=>{
 })
 //PUT
 router.put('/:pid',authAdmin,(req,res)=>{
+    let id = req.params.pid;
     let body = req.body;
-    let id = parseInt(req.params.pid);
     productos.updateProduct(id,body).then(result=>{
         res.send(result);
         console.log(result.message);

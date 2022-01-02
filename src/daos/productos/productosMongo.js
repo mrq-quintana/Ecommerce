@@ -1,4 +1,3 @@
-import Schema from "mongoose";
 import ContenedorMongo from "../../contenedores/ContenedorMongo.js";
 
 export default class ProductoMongo extends ContenedorMongo{
@@ -12,11 +11,6 @@ export default class ProductoMongo extends ContenedorMongo{
               codigo:{type:String , required:true},
               stock:{type:Number , required:true},
               thumbnail :{type:String},
-              carrito:{
-                  type: Schema.Types.ObjectId,
-                  ref: 'carrito',
-                  default: null,
-              }
             },{timestamps:true}
         )
     }

@@ -77,7 +77,7 @@ export default class ContenedorArchivo{
         }
         
     }
-    async deleteProductById(idCarrito,id_prod) {
+    async deleteProductById(idCarrito,id_prod){
         let info = await fs.promises.readFile(this.url, "utf-8");
         let infoJson = JSON.parse(info);
         let infoId = infoJson.find((i) => i.id === idCarrito);
@@ -102,7 +102,7 @@ export default class ContenedorArchivo{
         }
     }
     //CREATES
-    async saveProduct(productoAgregar) {
+    async saveProduct(productoAgregar){
         try {
           let info = await fs.promises.readFile(this.url, "utf-8");
           let infoJson = JSON.parse(info);
@@ -150,8 +150,8 @@ export default class ContenedorArchivo{
             return {message: "No se pudo agregar Producto " + error};
           }
         }
-      }
-    async saveCart() {
+    }
+    async saveCart(){
         try {
           let cart = await fs.promises.readFile(this.url, "utf-8");
           let cartJson = JSON.parse(cart);
@@ -174,7 +174,7 @@ export default class ContenedorArchivo{
         }
     }
     //UPDATES
-    async updateProduct(id, body) {
+    async updateProduct(id,body){
         let info = await fs.promises.readFile(this.url, 'utf-8');
         let infoJson = JSON.parse(info);
         let infoId = infoJson.find((i) => i.id === id);
@@ -219,5 +219,5 @@ export default class ContenedorArchivo{
           return { message: "El carrito o el producto no existe "};
         }
   
-      }
+    }
 }
