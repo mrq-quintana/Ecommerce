@@ -36,7 +36,7 @@ router.post('/:id',(req, res)=>{
     let idAgregar = req.body.id; 
     carrito.addToCart(idAgregar,idCarrito).then(result=>{
         res.send(result);
-
+        console.log(result.message)
     })
 })
 export default router;

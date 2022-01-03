@@ -16,7 +16,7 @@ router.get('/', (req,res)=>{
 router.get('/:id', (req,res)=>{
     const usuarioId = req.params.id;
     productos.getById(usuarioId).then((result)=>{
-        res.send(result.product);
+        res.send(result);
         console.log(result.message);
     })
 })
