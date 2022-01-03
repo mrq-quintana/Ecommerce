@@ -1,6 +1,6 @@
 let productos;
 let carrito;
-let persistencia = 'mongo';
+let persistencia = 'firebase';
 
 switch (persistencia) {
     case 'fileSystem':
@@ -19,7 +19,7 @@ switch (persistencia) {
         const { default: ProductosFirebase } = await import('./productos/productosFirebase.js')
         const { default: CarritoFirebase } = await import('./carrito/carritoFirebase.js')
         productos = new ProductosFirebase()
-        carrito = new CarritosFirebase()
+        carrito = new CarritoFirebase()
         break
 }
 export { productos, carrito }
