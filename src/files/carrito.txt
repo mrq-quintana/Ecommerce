@@ -56,12 +56,11 @@
       {
         "id": 11,
         "timestamp": "11/12/2021 , 12:59:41",
-        "title": "LeonA",
+        "title": "Leonazo",
         "price": 1100,
         "description": "Leon Azul",
         "codigo": "LeonA",
-        "stock": "6",
-        "thumbnail": "http://localhost:8080/images/1639238381727Lyon_Blue(1).jpeg"
+        "stock": "1000"
       }
     ]
   },
@@ -98,6 +97,15 @@
         "codigo": "LeonAz",
         "stock": "10",
         "thumbnail": "http://localhost:8080/images/1639236867924Lyon_Blue.jpeg"
+      },
+      {
+        "id": 11,
+        "timestamp": "11/12/2021 , 12:59:41",
+        "title": "Leonazo",
+        "price": 1100,
+        "description": "Leon Azul",
+        "codigo": "LeonA",
+        "stock": "1000"
       }
     ]
   }

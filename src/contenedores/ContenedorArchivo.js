@@ -23,6 +23,7 @@ export default class ContenedorArchivo{
         }
     }
     async getById(id){
+      id = parseInt(id);
       try{
           let info = await fs.promises.readFile(this.url, "utf-8");
           let infoJson = JSON.parse(info);
@@ -44,17 +45,18 @@ export default class ContenedorArchivo{
     }
     //DELETES
     async deleteById(id){
+        id= parseInt(id);
         try{
             let info = await fs.promises.readFile(this.url, "utf-8");
             let infoJson = JSON.parse(info);
             let infoId = infoJson.filter((i) => i.id !== id);
             let infoIdEliminado = infoJson.filter((i) => i.id === id);
-        
-            if (infoJson.find((i) => i.id === id)) {
+            console.log(infoIdEliminado.length)
+            if (infoIdEliminado.length > 0) {
             await fs.promises.writeFile(this.url,JSON.stringify(infoId, null, 2));
-            return {product: infoIdEliminado,message: "Item " + id + " eliminado",};
+            return {product: infoIdEliminado , message: "Item " + id + " eliminado",};
             } else {
-            return {product: infoId, message: "No existe item a eliminar"};
+            return {message: "No existe item a eliminar"};
             }
         } catch(error){
             return {
@@ -78,6 +80,8 @@ export default class ContenedorArchivo{
         
     }
     async deleteProductById(idCarrito,id_prod){
+        idCarrito = parseInt(idCarrito);
+        id_prod = parseInt(id_prod);
         let info = await fs.promises.readFile(this.url, "utf-8");
         let infoJson = JSON.parse(info);
         let infoId = infoJson.find((i) => i.id === idCarrito);
@@ -175,6 +179,7 @@ export default class ContenedorArchivo{
     }
     //UPDATES
     async updateProduct(id,body){
+        id = parseInt(id);
         let info = await fs.promises.readFile(this.url, 'utf-8');
         let infoJson = JSON.parse(info);
         let infoId = infoJson.find((i) => i.id === id);
@@ -204,6 +209,8 @@ export default class ContenedorArchivo{
         }
     }
     async addToCart(idAgregar,idCarrito){
+        idAgregar = parseInt(idAgregar);
+        idCarrito = parseInt(idCarrito);
         let cart = await fs.promises.readFile(this.url, "utf-8");
         let cartJson = JSON.parse(cart);
         let info = await fs.promises.readFile(`${config.fileSystem.url}`+'products.txt', "utf-8");

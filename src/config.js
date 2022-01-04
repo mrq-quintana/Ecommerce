@@ -1,6 +1,6 @@
 import __dirname from "./utils.js";
-
-export default{
+ 
+export default {
     fileSystem:{
         url:__dirname+'/files/'
     },
@@ -18,5 +18,5 @@ export default{
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-s1icy%40ecommerce-8868d.iam.gserviceaccount.com"
-      }
+    }
 }
