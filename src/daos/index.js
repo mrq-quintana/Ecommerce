@@ -1,6 +1,6 @@
 let productos;
 let carrito;
-let persistencia = 'fileSystem';
+let persistencia = 'mongo'; 
 
 switch (persistencia) {
     case 'fileSystem':
