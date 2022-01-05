@@ -12,6 +12,7 @@ export default class ContenedorMongo{
     async getAll(){
         try{
             let doc = await this.collection.find();
+
             if (doc!==[]) {
             return { product: doc, message: "Estos son todos los productos"};
             } else {
@@ -23,8 +24,9 @@ export default class ContenedorMongo{
     }
     async getById(id){
         try{
-            let doc = await this.collection.find({_id:id}).populate('productos');
-            if (doc) {
+            let doc = await this.collection.find({_id:id});
+            
+            if (doc.length > 0) {
             return { product: doc, message: "Id encontrado"};
             } else {
             return {message: "No se pudo encontrar Id "};
@@ -37,7 +39,9 @@ export default class ContenedorMongo{
     //DELETES
     async deleteById(id){
         try{
-            if(await this.collection.count({_id:id})){
+            let doc = await this.collection.find({_id:id});
+            
+            if (doc.length > 0) {
                 await this.collection.deleteOne({_id:id});
                 return {message: "Item " + id + " eliminado",}; 
             }else{
@@ -65,11 +69,11 @@ export default class ContenedorMongo{
     async deleteProductById(idCarrito,id_prod) {
         try{
             let doc = await this.collection.find({$and:[{_id:idCarrito},{productos:id_prod}]}).count();
-            if (doc) {
+            if (doc > 0) {
                 let document = await this.collection.updateOne({_id:idCarrito},{$pull:{productos:id_prod}});
-                return { product: document, message: "Id encontrado"};
+                return {message: "Producto eliminado"};
             } else {
-                return {message: "No se pudo encontrar Id "};
+                return {message: "No se pudo eliminar con el producto"};
             }
         } catch(error){
                 return {message: "No se pudo realizar accion " + error};
@@ -113,11 +117,12 @@ export default class ContenedorMongo{
     }
     async addToCart(idAgregar,idCarrito) {
         try{
-            if(await this.collection.count({_id:idCarrito})){
-             let doc = await this.collection.updateOne({_id:idCarrito},{$push:{productos:idAgregar}});
-            return { product:doc, message: "Id agregado correctamente al carrito "+idCarrito+" "};
+            let doc = await this.collection.count({_id:idCarrito})
+            if(doc > 0){
+             await this.collection.updateOne({_id:idCarrito},{$push:{productos:idAgregar}});
+            return {message: "Id agregado correctamente al carrito "+idCarrito+" "};
             }else{
-                return { message: "No se puede agregar producto"};
+                return {message: "No se puede agregar producto"};
             } 
         }catch(error){
             return {message: "No se pudo agregar Producto " + error};

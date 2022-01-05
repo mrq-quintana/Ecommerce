@@ -120,10 +120,10 @@ export default class ContenedorArchivo{
               id: parseInt(infoJson.length + 1),
               timestamp: time.toLocaleDateString() +" , "+ time.toTimeString().split(" ")[0],
               title: productoAgregar.title,
-              price: productoAgregar.price,
+              price: parseInt(productoAgregar.price),
               description: productoAgregar.description,
               codigo:productoAgregar.codigo,
-              stock:productoAgregar.stock,
+              stock:parseInt(productoAgregar.stock),
               thumbnail :productoAgregar.thumbnail,
             };
     
@@ -141,10 +141,10 @@ export default class ContenedorArchivo{
             id: 1,
             timestamp: time.toLocaleDateString() +" , "+ time.toTimeString().split(" ")[0],
             title: productoAgregar.title,
-            price: productoAgregar.price,
+            price: parseInt(productoAgregar.price),
             description: productoAgregar.description,
             codigo:productoAgregar.codigo,
-            stock:productoAgregar.stock,
+            stock:parseInt(productoAgregar.stock),
             thumbnail :productoAgregar.thumbnail,
           };    
           try {
