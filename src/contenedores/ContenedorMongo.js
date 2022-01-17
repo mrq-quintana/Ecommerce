@@ -4,16 +4,15 @@ import config from '../config.js';
 
 mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{
     console.log("Mongodb esta conectado");
-    }).catch((error)=>{
-    console.log("Mongodb se se ha podido conectar");
+    }).catch((error)=>{console.log("Mongodb se se ha podido conectar");
     console.log(error);
-});;
+});; 
 
 export default class ContenedorMongo{
     constructor(collection,schema,timestamps){
         this.collection = mongoose.model(collection, new mongoose.Schema(schema,timestamps));
-
     }
+
     //READS
     async getAll(){
         try{
@@ -100,6 +99,22 @@ export default class ContenedorMongo{
             return {message: "No se pudo agregar Producto " + error};
         }
     }
+    async saveUser(user) {
+        console.log(user.email)
+        try {
+            let doc = await this.collection.find();
+            console.log(doc)
+            if (doc.some((i) => i.email === user.email||i.usuario===user.usuario)) {
+                return {error:-2, message: 'El nombre de usuario o email ya fueron registrados'};
+            } else {
+                let producto = await this.collection.create(user);
+                               await producto.save(); 
+            return {message: "Ususario agregado" };
+            }
+        } catch (error) {
+            return {message: "No se pudo agregar Producto " + error};
+        }
+    }
     async saveCart() {
         try {
           let cart = await this.collection.insertMany();
@@ -133,7 +148,5 @@ export default class ContenedorMongo{
         }catch(error){
             return {message: "No se pudo agregar Producto " + error};
         }
-    }
-
-    
+    }    
 }

@@ -2,7 +2,7 @@ import express from 'express';
 import {engine} from 'express-handlebars';
 import cors from 'cors';
 import upload from './service/upload.js';
-import {productos} from './daos/index.js'
+import {productos, usuario} from './daos/index.js'
 import products from './routes/products.js';
 import cart from './routes/cart.js'
 import __dirname from './utils.js';
@@ -46,6 +46,15 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
     }
     res.send(files)
 })
+
+app.post('/api/register', async (req,res)=>{
+    let user = req.body;
+    let result = await usuario.saveUser(user);
+    console.log(result)
+    res.send(result)
+})
+
+
 //VISTA ARTICULOS
 app.get('/views/articulos',(req,res)=>{
     productos.getAll().then(result=>{

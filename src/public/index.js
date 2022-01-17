@@ -37,12 +37,12 @@ socket.on('log',data=>{
     p.innerHTML = todosMsj;
 })
 
-document.addEventListener('submit',enviarForm);
+let formProduct= document.getElementById('formProduct');
+formProduct.addEventListener('submit',enviarForm);
 
 function enviarForm(event){
     event.preventDefault();
-    let form= document.getElementById('formProduct');
-    let data = new FormData(form);
+    let data = new FormData(formProduct);
     fetch('/api/productos',{
         method:'POST',
         body:data
@@ -66,7 +66,7 @@ function enviarForm(event){
             })
         }
     })
-    document.getElementById('formProduct').reset();
+    formProduct.reset();
 }
 document.getElementById("image").onchange = (e)=>{
     let read = new FileReader();

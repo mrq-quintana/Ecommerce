@@ -16,7 +16,43 @@
 
 <body>
     <input type="button" onclick="location.href='/views/articulos'" value="Ver articulos / handlebars">
+    <!-- Registro de usuario -->
     
+    <div class="main-container">
+        <div class="form-container">
+            <h2 class="title">Por favor registrese</h2>
+            <form id="registerForm" class="form">
+                <label for="first_name">Nombre</label>
+                <div class="form-floating form-input">
+                    <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <label for="last_name">Apellido</label>
+                <div class="form-floating form-input">
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+                <label for="age">Edad</label>
+                <div class="form-floating form-input">
+                    <input type="number" id="age" name="age">
+                </div>
+                <label for="username">Usuario</label>
+                <div class="form-floating form-input">
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <label for="email">Email</label>
+                <div class="form-floating form-input">
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <label for="password">Contraseña</label>
+                <div class="form-floating form-input">
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-floating form-input">
+                    <input type="submit" value="Guardar" class="submit-button">
+                </div>
+            </form>
+            <!-- <p>Ya esta registrado? Ingrese <a href="pages/login.html">Ingresar</a></p> -->
+        </div>
+    </div>
     <div class="main-container">
         <div class="form-container">
             <h1 class="title">Gestor de articulos</h1>
@@ -27,21 +63,21 @@
                 </div>
                 <label for="price">Precio: </label>
                 <div class="form-floating form-input">
-                    <input class="form-control" type="number" name="price" id="age" placeholder="age" required>
+                    <input class="form-control" type="number" name="price" id="price" placeholder="price" required>
                 </div>
                 <label for="description">Descripcion</label>
                 <div class="form-floating form-input">
-                    <input class="form-control" type="text" name="description" id="name" placeholder="description"
+                    <input class="form-control" type="text" name="description" id="description" placeholder="description"
                         required>
                 </div>
                 <label for="codigo">Codigo</label>
                 <div class="form-floating form-input">
-                    <input class="form-control" type="text" name="codigo" id="name" placeholder="codigo"
+                    <input class="form-control" type="text" name="codigo" id="codigo" placeholder="codigo"
                         required>
                 </div>
                 <label for="stock">Stock</label>
                 <div class="form-floating form-input">
-                    <input class="form-control" type="text" name="stock" id="name" placeholder="stock"
+                    <input class="form-control" type="text" name="stock" id="stock" placeholder="stock"
                         required>
                 </div>
 
@@ -63,27 +99,26 @@
                 </div>
         </div>
         </form>
-        <h1>Nombre:</h1>
-        <div>
-            <input id="user">
-        </div>
-        <h1>Mensaje:</h1>
-        <div>
-            <input id="idChat">
-        </div>
-        <div>
-            <div id="log"></div>
-        </div>
-        <!-- aca va la lista -->
-        <h1>Tabla de productos</h1>
-        <div>
-            <div id="idProductos"></div>
-        </div>
+            <h1>Nombre:</h1>
+            <div>
+                <input id="user">
+            </div>
+            <h1>Mensaje:</h1>
+            <div>
+                <input id="idChat">
+            </div>
+            <div>
+                <div id="log"></div>
+            </div>
+            <!-- aca va la lista -->
+            <h1>Tabla de productos</h1>
+            <div>
+                <div id="idProductos"></div>
+            </div>
     </div>
    
-    </div>
-
     <script src="/socket.io/socket.io.js"></script>
+    <script src="js/registro.js"></script>
     <script src="./index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
         integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="

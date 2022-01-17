@@ -3,6 +3,7 @@
 }
 .form-container{
     width:850px;
+    align-items: center;
     margin:auto;
     border:1px solid black;
     border-radius:5px;
