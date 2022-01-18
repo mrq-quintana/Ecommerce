@@ -21,6 +21,7 @@ app.set('views',__dirname+'/viewsHandlebars');
 app.set('view engine','handlebars');
 
 const admin = true;
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
@@ -47,6 +48,8 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
     res.send(files)
 })
 
+
+//REGISTRO DE USUARIO
 app.post('/api/register', async (req,res)=>{
     let user = req.body;
     let result = await usuario.saveUser(user);
@@ -70,17 +73,23 @@ app.use((req,res,next)=>{
     res.status(404).send({error:-1,message:"La ruta que desea ingresar no existe"})
     console.log("La ruta que desea ingresar no existe");
 })
+
+
+
 //SOCKET
 let mensajes = [];
+
 io.on('connection', async socket=>{
     console.log(`El socket ${socket.id} se ha conectado`);
-        socket.emit('log',mensajes);
     let products = await productos.getAll();
-        socket.emit('actualiza', products);    
-        socket.on('msj', data=>{
-            mensajes.push(data)
+    socket.emit('actualiza', products); 
+    
+    socket.emit('log',mensajes);
+
+    socket.on('msj', data=>{
+        mensajes.push(data)
         io.emit('log',mensajes);
-    })
+        })
 })
 
 

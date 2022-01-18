@@ -1,18 +1,21 @@
-const socket = io();
 
+// CHAT
+const socket = io();
+//ACTUALIZA LISTA
 socket.on('actualiza', data=>{
     let prod = data.product;
     fetch('templates/productsTable.handlebars').then(string=> string.text()).then(template=>{
         const plantilla = Handlebars.compile(template);
-        const objPlantilla={
-            productos:prod
-        }
+        const objPlantilla={ productos:prod}
         const html = plantilla(objPlantilla);
+
         let div = document.getElementById('idProductos');
         div.innerHTML= html;
     })
 })
 
+
+//INTERACCION CHAT
 let input = document.getElementById('idChat');
 let user = document.getElementById('user');
 input.addEventListener('keyup',(e)=>{
@@ -20,6 +23,7 @@ input.addEventListener('keyup',(e)=>{
         if(e.target.value){
             let timestamp = Date.now();
             let time = new Date(timestamp);
+            
             socket.emit('msj', { user:user.value, message:e.target.value, hoy:time.toLocaleDateString() , hora:time.toTimeString().split(" ")[0]})
         }else{
             console.log('Mensaje vacio')
@@ -37,9 +41,11 @@ socket.on('log',data=>{
     p.innerHTML = todosMsj;
 })
 
+//--FIN--//
+
+//GESTOR DE PRODUCTOS
 let formProduct= document.getElementById('formProduct');
 formProduct.addEventListener('submit',enviarForm);
-
 function enviarForm(event){
     event.preventDefault();
     let data = new FormData(formProduct);
@@ -68,6 +74,8 @@ function enviarForm(event){
     })
     formProduct.reset();
 }
+
+//FOTO PRELIMINAR
 document.getElementById("image").onchange = (e)=>{
     let read = new FileReader();
     read.onload = e =>{
