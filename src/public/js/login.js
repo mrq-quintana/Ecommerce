@@ -3,7 +3,7 @@ form.addEventListener('submit',function(event){
     event.preventDefault();
     let data = new FormData(form);
     let loginUsuario ={
-        usuario: data.get('usuario'),
+        email: data.get('email'),
         password: data.get('password')
     }
     fetch('/api/login',{
@@ -12,26 +12,24 @@ form.addEventListener('submit',function(event){
         headers:{
             'Content-Type':'application/json'
         }
-    }).then(result=>{
-        return result.json();
-    }).then(json=>{
-        console.log(json.error);
+    }).then(result=> result.json()).then(json=>{
+        console.log(json);
         if(json.error === -2){
             Swal.fire({
-                title:'No se puede guardar',
+                title:'Usuario no registrado',
                 text:json.message,
                 icon:'error',
                 timer:5000,
             })
         } else{
             Swal.fire({
-                title:'Guardado',
+                title:'Bienvenido',
                 text:json.message,
                 icon:'success',
                 timer:5000,
             })
+            setTimeout(location.replace('./gestorArt.html'),7000);
         }
-        location.replace('./gestorArt.html')
     })
     form.reset();
 })

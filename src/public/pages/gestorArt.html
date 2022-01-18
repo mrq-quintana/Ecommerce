@@ -14,7 +14,7 @@
 </head>
 <body>
     <input type="button" onclick="location.href='../views/articulos'" value="Ver articulos">
-    
+    <div id="bienvenido">Bienvenido</div>
     <div class="main-container">
         <div class="form-container">
             <h1 class="title">Gestor de articulos</h1>
@@ -42,8 +42,6 @@
                     <input class="form-control" type="text" name="stock" id="stock" placeholder="stock"
                         required>
                 </div>
-
-
                 <label for="image">Imagen</label>
                 <div class="form-floating form-input">
                     <input class="form-control" type="file" accept="image/*" name="image" id="image" required>
@@ -61,17 +59,17 @@
                 </div>
         </div>
         </form>
-            <h1>Nombre:</h1>
-            <div>
-                <input id="user">
+        <div class="main-container">
+            <div class="form-container">
+                <h1>Mensaje:</h1>
+                    <div>
+                        <input id="idChat">
+                    </div>
+                    <div>
+                        <div id="log"></div>
+                    </div>
             </div>
-            <h1>Mensaje:</h1>
-            <div>
-                <input id="idChat">
-            </div>
-            <div>
-                <div id="log"></div>
-            </div>
+        </div>               
             <!-- aca va la lista -->
             <h1>Tabla de productos</h1>
             <div>

@@ -13,39 +13,16 @@ socket.on('actualiza', data=>{
         div.innerHTML= html;
     })
 })
-
-
-//INTERACCION CHAT
-let input = document.getElementById('idChat');
-let user = document.getElementById('user');
-input.addEventListener('keyup',(e)=>{
-    if(e.key==="Enter"){
-        if(e.target.value){
-            let timestamp = Date.now();
-            let time = new Date(timestamp);
-            
-            socket.emit('msj', { user:user.value, message:e.target.value, hoy:time.toLocaleDateString() , hora:time.toTimeString().split(" ")[0]})
-        }else{
-            console.log('Mensaje vacio')
-        }
-    }
+let usuario;
+fetch('/currentUser').then(result=>result.json()).then(json=>{
+    usuario=json;
+    let bienvenido = document.getElementById('bienvenido');
+    bienvenido.innerHTML = 'Bienvenido ' + usuario.username;
 })
-
-socket.on('log',data=>{
-    let p =document.getElementById('log');
-    let todosMsj = data.map(message=>{
-        return `<div>
-                    <span>${message.user} dice: ${message.message}, ${message.hoy}, ${message.hora}</span>
-                </div>`
-    }).join('');
-    p.innerHTML = todosMsj;
-})
-
-//--FIN--//
-
 //GESTOR DE PRODUCTOS
 let formProduct= document.getElementById('formProduct');
 formProduct.addEventListener('submit',enviarForm);
+
 function enviarForm(event){
     event.preventDefault();
     let data = new FormData(formProduct);
@@ -85,4 +62,35 @@ document.getElementById("image").onchange = (e)=>{
     
     read.readAsDataURL(e.target.files[0])
 }
+
+//INTERACCION CHAT
+let input = document.getElementById('idChat');
+
+input.addEventListener('keyup',(e)=>{
+    if(e.key==="Enter"){
+        if(e.target.value){
+            let timestamp = Date.now();
+            let time = new Date(timestamp);
+            socket.emit('msj', {message:e.target.value, hoy:time.toLocaleDateString() , hora:time.toTimeString().split(" ")[0]})
+            e.target.value="";
+        }else{
+            console.log('Mensaje vacio')
+        }
+    }
+})
+
+socket.on('log',textos=>{
+    let p =document.getElementById('log');
+    console.log(textos)
+    let todosMsj = textos.map(message=>{
+        return `<div>
+                    <span>${message.user} dice: ${message.message}, ${message.createdAt}</span>
+                </div>`
+    }).join('');
+    p.innerHTML = todosMsj;
+})
+
+//--FIN--//
+
+
 

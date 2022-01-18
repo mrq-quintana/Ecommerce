@@ -2,7 +2,7 @@ let productos;
 let carrito;
 let usuario;
 let mensajes;
-let session;
+let sesion;
 let persistencia = 'mongo';
 
 switch (persistencia) {
@@ -21,7 +21,7 @@ switch (persistencia) {
         productos = new ProductosMongo()
         carrito = new CarritoMongo()
         usuario = new UsersMongo()
-        session= new SessionMongo()
+        sesion= new SessionMongo()
         mensajes = new MessagessMongo()
         break
     case 'firebase':
@@ -31,4 +31,4 @@ switch (persistencia) {
         carrito = new CarritoFirebase()
         break
 }
-export { productos, carrito, usuario, session };
+export { productos, carrito, usuario, sesion,mensajes };

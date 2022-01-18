@@ -43,13 +43,24 @@ export default class ContenedorMongo{
     }
     async getByUser(usuario){
         try{
-            let doc = await this.collection.find({usuario:usuario.usuario});
-            console.log(usuario)
-            console.log(doc)
-            if (doc.usuario===usuario.usuario && doc.password===usuario.password) {
-            return { message: "Login"};
+            let doc = await this.collection.find({email:usuario.email});
+            if (doc[0].email===usuario.email && doc[0].password===usuario.password) {
+            return {status:200 ,user:doc[0]};
             } else {
-            return {message: "No se pudo loguear "};
+            return {status:400, error: -2, user:[], message: "No se pudo loguear "};
+            }
+        } catch(error){
+            return {message: "No se pudo realizar accion " + error};
+        }
+  
+    }
+    async getBy(usuario){
+        try{
+            let doc = await this.collection.find({usuario:usuario});
+            if (doc) {
+            return {status:200 ,user:doc[0]};
+            } else {
+            return {status:400, error: -2, user:[], message: "No se pudo loguear "};
             }
         } catch(error){
             return {message: "No se pudo realizar accion " + error};
@@ -115,10 +126,8 @@ export default class ContenedorMongo{
         }
     }
     async saveUser(user) {
-        console.log(user.email)
         try {
             let doc = await this.collection.find();
-            console.log(doc)
             if (doc.some((i) => i.email === user.email||i.usuario===user.usuario)) {
                 return {error:-2, message: 'El nombre de usuario o email ya fueron registrados'};
             } else {
@@ -138,6 +147,15 @@ export default class ContenedorMongo{
             return {message: "No se pudo agregar carrito " + error};
         }
     }
+    async saveMessage(mensajes){
+        try {
+            let msj = await this.collection.create(mensajes);
+                               await msj.save(); 
+        } catch (error) {
+            
+        }
+    }
+
     //UPDATES
     async updateProduct(id, body) {    
         try{

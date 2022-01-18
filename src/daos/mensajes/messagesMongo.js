@@ -7,7 +7,7 @@ export default class MessagesMongo extends ContenedorMongo{
             'mensajes',
             { 
                 user:{ type:Schema.Types.ObjectId, ref:'Users', required:true},
-                text:{ type:String, required:true}
+                message:{ type:String, required:true}
             },{timestamps:true}
         )
     }

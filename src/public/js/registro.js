@@ -16,9 +16,7 @@ form.addEventListener('submit',function(event){
         headers:{
             'Content-Type':'application/json'
         }
-    }).then(result=>{
-        return result.json();
-    }).then(json=>{
+    }).then(result=>result.json()).then(json=>{
         console.log(json.error);
         if(json.error === -2){
             Swal.fire({
@@ -34,8 +32,8 @@ form.addEventListener('submit',function(event){
                 icon:'success',
                 timer:5000,
             })
+            setTimeout(location.replace('./pages/login.html'),7000);
         }
-        location.replace('./pages/login.html')
     })
     form.reset();
-})
+}) 

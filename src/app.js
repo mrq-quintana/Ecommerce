@@ -2,17 +2,28 @@ import express from 'express';
 import {engine} from 'express-handlebars';
 import cors from 'cors';
 import upload from './service/upload.js';
-import {productos, usuario, session} from './daos/index.js'
+import {productos, usuario, sesion , mensajes} from './daos/index.js' 
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import products from './routes/products.js';
 import cart from './routes/cart.js'
 import __dirname from './utils.js';
-import {Server} from 'socket.io'
+import {Server} from 'socket.io';
+import ios from 'socket.io-express-session';
 
 const app = express();
 const PORT = process.env.PORT||8080;
 const server = app.listen(PORT,()=>{
     console.log("Escuchando en puerto " + PORT)
 });
+const baseSession = (session({
+    store:MongoStore.create({mongoUrl:'mongodb+srv://Maxi:123@ecommerce.dgoa9.mongodb.net/Ecommerce?retryWrites=true&w=majority'}),
+    resave:false,
+    saveUninitialized:false,
+    secret:"CoderChat"
+}))
+
+const admin = true;
 
 export const io = new Server(server);
 
@@ -20,12 +31,11 @@ app.engine('handlebars', engine());
 app.set('views',__dirname+'/viewsHandlebars');
 app.set('view engine','handlebars');
 
-const admin = true;
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
-
+app.use(baseSession);
+io.use(ios(baseSession));
 app.use((req,res,next)=>{
     let timestamp = Date.now();
     let time = new Date(timestamp);
@@ -38,7 +48,7 @@ app.use('/api/productos',products);
 app.use('/api/carritos',cart);
 
 
-//POST
+//SUBIR IMAGEN
 app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
     const files = req.file; 
     console.log(files);
@@ -47,8 +57,10 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
     }
     res.send(files)
 })
-
-
+//SESION USUARIO
+app.get('/currentUser',(req,res)=>{
+    res.send(req.session.user)
+})
 //REGISTRO DE USUARIO
 app.post('/api/register', async (req,res)=>{
     let user = req.body;
@@ -56,14 +68,20 @@ app.post('/api/register', async (req,res)=>{
     console.log(result)
     res.send(result)
 })
-app.post('/api/login', async (req,res)=>{
-    let user = req.body;
-    console.log(user)
-    let result = await session.getByUser(user);
-    console.log(result)
-    res.send(result) 
-})
 
+//LOGIN USUARIO
+app.post('/api/login', async (req,res)=>{
+    let {email,password} = req.body;
+    let user = await usuario.getByUser({email:email,password:password});
+    console.log(user)
+    if(user.status===200){
+        req.session.user={
+            username:user.user.usuario,
+            email:user.user.email
+        }
+        return res.send({message:'Bienvenido ' + user.user.usuario +' logueado correctamente'})
+    }
+})
 
 //VISTA ARTICULOS
 app.get('/views/articulos',(req,res)=>{
@@ -84,18 +102,22 @@ app.use((req,res,next)=>{
 
 
 //SOCKET
-let mensajes = [];
-
 io.on('connection', async socket=>{
     console.log(`El socket ${socket.id} se ha conectado`);
     let products = await productos.getAll();
-    socket.emit('actualiza', products); 
-    
-    socket.emit('log',mensajes);
 
-    socket.on('msj', data=>{
-        mensajes.push(data)
-        io.emit('log',mensajes);
+    socket.emit('actualiza', products); 
+    socket.on('msj', async data=>{
+        let user = await usuario.getBy(socket.handshake.session.user.username)
+        let mjs = {
+            user:user.user._id,
+            message: data.message
+        }
+            await mensajes.saveMessage(mjs);
+        const textos = await mensajes.getAll()
+        console.log(textos.product)
+        io.emit('log',textos.product); 
+
         })
 })
 
