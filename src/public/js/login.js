@@ -1,18 +1,14 @@
-let form  = document.getElementById("registerForm");
+let form  = document.getElementById("loginForm");
 form.addEventListener('submit',function(event){
     event.preventDefault();
     let data = new FormData(form);
-    let datosUsuario ={
-        nombre: data.get('first_name'),
-        apellido: data.get('last_name'),
-        edad: data.get('age'),
-        usuario: data.get('username'),
-        email: data.get('email'),
+    let loginUsuario ={
+        usuario: data.get('usuario'),
         password: data.get('password')
     }
-    fetch('/api/register',{
+    fetch('/api/login',{
         method:"POST",
-        body:JSON.stringify(datosUsuario),
+        body:JSON.stringify(loginUsuario),
         headers:{
             'Content-Type':'application/json'
         }
@@ -35,7 +31,7 @@ form.addEventListener('submit',function(event){
                 timer:5000,
             })
         }
-        location.replace('./pages/login.html')
+        location.replace('./gestorArt.html')
     })
     form.reset();
 })

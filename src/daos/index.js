@@ -2,6 +2,7 @@ let productos;
 let carrito;
 let usuario;
 let mensajes;
+let session;
 let persistencia = 'mongo';
 
 switch (persistencia) {
@@ -15,10 +16,12 @@ switch (persistencia) {
         const { default: ProductosMongo } = await import('./productos/productosMongo.js')
         const { default: CarritoMongo } = await import('./carrito/carritoMongo.js')
         const { default: UsersMongo } = await import('./usuarios/usersMongo.js')
+        const { default: SessionMongo } = await import('./usuarios/sessionMongo.js')
         const { default: MessagessMongo } = await import('./mensajes/messagesMongo.js')
         productos = new ProductosMongo()
         carrito = new CarritoMongo()
         usuario = new UsersMongo()
+        session= new SessionMongo()
         mensajes = new MessagessMongo()
         break
     case 'firebase':
@@ -28,4 +31,4 @@ switch (persistencia) {
         carrito = new CarritoFirebase()
         break
 }
-export { productos, carrito, usuario };
+export { productos, carrito, usuario, session };

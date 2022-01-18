@@ -41,6 +41,21 @@ export default class ContenedorMongo{
         }
   
     }
+    async getByUser(usuario){
+        try{
+            let doc = await this.collection.find({usuario:usuario.usuario});
+            console.log(usuario)
+            console.log(doc)
+            if (doc.usuario===usuario.usuario && doc.password===usuario.password) {
+            return { message: "Login"};
+            } else {
+            return {message: "No se pudo loguear "};
+            }
+        } catch(error){
+            return {message: "No se pudo realizar accion " + error};
+        }
+  
+    }
     //DELETES
     async deleteById(id){
         try{
