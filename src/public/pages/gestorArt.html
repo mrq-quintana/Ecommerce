@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,49 +10,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
         integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <title>Articulos</title>
+    <title>Gestor</title>
 </head>
-
 <body>
-    <!-- Registro de usuario -->
+    <input type="button" onclick="location.href='../views/articulos'" value="Ver articulos">
+    
     <div class="main-container">
-        <div class="form-container">
-            <h2 class="title">Por favor registrese</h2>
-            <form id="registerForm" class="form">
-                <label for="first_name">Nombre</label>
-                <div class="form-floating form-input">
-                    <input type="text" id="first_name" name="first_name" required>
-                </div>
-                <label for="last_name">Apellido</label>
-                <div class="form-floating form-input">
-                    <input type="text" id="last_name" name="last_name" required>
-                </div>
-                <label for="age">Edad</label>
-                <div class="form-floating form-input">
-                    <input type="number" id="age" name="age">
-                </div>
-                <label for="username">Usuario</label>
-                <div class="form-floating form-input">
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <label for="email">Email</label>
-                <div class="form-floating form-input">
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <label for="password">Contraseña</label>
-                <div class="form-floating form-input">
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-floating form-input">
-                    <input type="submit" value="Guardar" class="submit-button">
-                </div>
-            </form>
-            <p>Ya esta registrado? Ingrese <a href="pages/login.html">Ingresar</a></p>
-        </div>
-    </div>
-
-
-    <!-- <div class="main-container">
         <div class="form-container">
             <h1 class="title">Gestor de articulos</h1>
             <form id="formProduct" name="formProduct" class="form">
@@ -110,14 +72,15 @@
             <div>
                 <div id="log"></div>
             </div>
+            <!-- aca va la lista -->
             <h1>Tabla de productos</h1>
             <div>
                 <div id="idProductos"></div>
             </div>
-    </div> -->
-   
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/registro.js"></script>
+    <script src="../js/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
         integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -131,5 +94,4 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
-
 </html>
