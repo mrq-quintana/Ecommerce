@@ -16,7 +16,7 @@ export default class ContenedorMongo{
     //READS
     async getAll(){
         try{
-            let doc = await this.collection.find();
+            let doc = await this.collection.find(); 
 
             if (doc!==[]) {
             return { product: doc, message: "Estos son todos los productos"};

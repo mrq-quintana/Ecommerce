@@ -14,6 +14,7 @@ socket.on('actualiza', data=>{
     })
 })
 let usuario;
+
 fetch('/currentUser').then(result=>result.json()).then(json=>{
     usuario=json;
     let bienvenido = document.getElementById('bienvenido');
@@ -87,7 +88,7 @@ socket.on('log',textos=>{
                     <span>${message.usuario} dice: ${message.message}, ${message.createdAt}</span>
                 </div>`
     }).join('');
-    p.innerHTML = todosMsj;
+    p.innerHTML = todosMsj; 
 })
 
 //--FIN--//

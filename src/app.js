@@ -18,14 +18,16 @@ const server = app.listen(PORT,()=>{
 });
 const baseSession = (session({
     store:MongoStore.create({mongoUrl:'mongodb+srv://Maxi:123@ecommerce.dgoa9.mongodb.net/Ecommerce?retryWrites=true&w=majority'}),
+    secret:"CoderChat", 
     resave:false,
+    cookie:{maxAge:60000},
     saveUninitialized:false,
-    secret:"CoderChat"
 }))
 
-const admin = true;
 
-export const io = new Server(server);
+const admin =true;
+
+export const io = new Server(server); 
 
 app.engine('handlebars', engine());
 app.set('views',__dirname+'/viewsHandlebars');
@@ -40,9 +42,11 @@ app.use((req,res,next)=>{
     let timestamp = Date.now();
     let time = new Date(timestamp);
     console.log('Hora de petición: '+time.toTimeString().split(" ")[0],req.method,req.url);
-    req.auth = admin;
+    req.auth = admin; 
     next();
+    
 })
+app.use(isLogin);
 app.use(express.static(__dirname+'/public'));
 app.use('/api/productos',products);
 app.use('/api/carritos',cart);
@@ -77,7 +81,8 @@ app.post('/api/login', async (req,res)=>{
     if(user.status===200){
         req.session.user={
             username:user.user.usuario,
-            email:user.user.email
+            email:user.user.email,
+            role:"empleado"
         }
         return res.send({message:'Bienvenido ' + user.user.usuario +' logueado correctamente'})
     }
