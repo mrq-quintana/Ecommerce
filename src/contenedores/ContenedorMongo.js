@@ -148,9 +148,10 @@ export default class ContenedorMongo{
         }
     }
     async saveMessage(mensajes){
+        console.log(mensajes)
         try {
             let msj = await this.collection.create(mensajes);
-                               await msj.save(); 
+                      await msj.save(); 
         } catch (error) {
             
         }

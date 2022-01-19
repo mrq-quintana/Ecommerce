@@ -84,7 +84,7 @@ socket.on('log',textos=>{
     console.log(textos)
     let todosMsj = textos.map(message=>{
         return `<div>
-                    <span>${message.user} dice: ${message.message}, ${message.createdAt}</span>
+                    <span>${message.usuario} dice: ${message.message}, ${message.createdAt}</span>
                 </div>`
     }).join('');
     p.innerHTML = todosMsj;

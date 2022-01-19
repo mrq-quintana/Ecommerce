@@ -111,10 +111,11 @@ io.on('connection', async socket=>{
         let user = await usuario.getBy(socket.handshake.session.user.username)
         let mjs = {
             user:user.user._id,
+            usuario:user.user.usuario,
             message: data.message
         }
             await mensajes.saveMessage(mjs);
-        const textos = await mensajes.getAll()
+        const textos = await mensajes.getAll();
         console.log(textos.product)
         io.emit('log',textos.product); 
 
