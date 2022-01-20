@@ -13,9 +13,9 @@ socket.on('actualiza', data=>{
         div.innerHTML= html;
     })
 })
-let usuario;
 
-fetch('/currentUser').then(result=>result.json()).then(json=>{
+let usuario;
+fetch('/currentUser').then(result=>result.json()).then(json=>{ 
     usuario=json;
     let bienvenido = document.getElementById('bienvenido');
     bienvenido.innerHTML = 'Bienvenido ' + usuario.username;

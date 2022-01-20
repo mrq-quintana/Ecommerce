@@ -10,6 +10,5 @@ export const authAdmin = (req,res,next)=>{
     res.status(403).send({error:-2,message:"Usuario no autorizado"})
     else next();
 }
-
-export default __dirname;
+export default __dirname; 
 
