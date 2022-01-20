@@ -23,8 +23,8 @@ const server = app.listen(PORT,()=>{
 const baseSession = (session({
     store:MongoStore.create({mongoUrl:'mongodb+srv://Maxi:123@ecommerce.dgoa9.mongodb.net/Ecommerce?retryWrites=true&w=majority'}),
     secret:"CoderChat", 
-    resave:false,
-    cookie:{maxAge:60000},
+    resave:true,
+    cookie:{maxAge:6000},
     saveUninitialized:false,
 }))
 
@@ -64,7 +64,11 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
 })
 //SESION USUARIO
 app.get('/currentUser',(req,res)=>{
-    res.send(req.session.user)
+    if(req.session.user){
+        res.send(req.session.user)
+    }else{
+        res.send({error: -2})
+    }
 })
 
 //REGISTRO DE USUARIO

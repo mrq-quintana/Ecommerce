@@ -13,13 +13,29 @@ socket.on('actualiza', data=>{
         div.innerHTML= html;
     })
 })
-
 let usuario;
+
 fetch('/currentUser').then(result=>result.json()).then(json=>{ 
     usuario=json;
-    let bienvenido = document.getElementById('bienvenido');
-    bienvenido.innerHTML = 'Bienvenido ' + usuario.username;
-})
+    console.log(json.error)
+    if(json.error === -2){
+        console.log('Adios')
+        location.replace('/pages/login.html')
+    } else{
+        let bienvenido = document.getElementById('bienvenido');
+        bienvenido.innerHTML = 'Bienvenido ' + usuario.username;
+        }
+    })
+    
+
+
+
+
+
+
+
+
+
 //GESTOR DE PRODUCTOS
 let formProduct= document.getElementById('formProduct');
 formProduct.addEventListener('submit',enviarForm);
