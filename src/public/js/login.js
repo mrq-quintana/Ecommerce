@@ -1,3 +1,4 @@
+
 let form  = document.getElementById("loginForm");
 form.addEventListener('submit',function(event){
     event.preventDefault();
@@ -13,8 +14,7 @@ form.addEventListener('submit',function(event){
             'Content-Type':'application/json'
         }
     }).then(result=> result.json()).then(json=>{
-        console.log(json);
-        if(json.error === -2){
+        if(json.error===-2){
             Swal.fire({
                 title:'Usuario no registrado',
                 text:json.message,

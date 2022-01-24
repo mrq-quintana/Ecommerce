@@ -41,17 +41,13 @@ export default class ContenedorMongo{
         }
   
     }
-    async getByUser(usuario){
+    async getByUser(loginUsuario){
         try{
-            let doc = await this.collection.find({email:usuario.email});
-            if (doc[0].email===usuario.email && doc[0].password===usuario.password) {
-            return {status:200 ,user:doc[0]};
-            } else {
-            return {status:400, error: -2, user:[], message: "No se pudo loguear "};
-            }
-        } catch(error){
-            return {message: "No se pudo realizar accion " + error};
-        }
+            let usuarioRegistrado = await this.collection.find({email:loginUsuario.email});
+            if (usuarioRegistrado[0].email===loginUsuario.email && usuarioRegistrado[0].password===loginUsuario.password) {
+            return {status:200 ,user:usuarioRegistrado[0]};
+            }else{ return {status:400, error: -2, user:[], message: "No se pudo loguear correctamente"};}
+        } catch(error){return {message: "No se pudo realizar accion " + error};}
   
     }
     async getBy(usuario){
@@ -127,16 +123,15 @@ export default class ContenedorMongo{
     }
     async saveUser(user) {
         try {
-            let doc = await this.collection.find();
-            if (doc.some((i) => i.email === user.email||i.usuario===user.usuario)) {
-                return {error:-2, message: 'El nombre de usuario o email ya fueron registrados'};
-            } else {
-                let producto = await this.collection.create(user);
-                               await producto.save(); 
-            return {message: "Ususario agregado" };
-            }
+            let baseUsuarios = await this.collection.find();
+            if (baseUsuarios.some((ingreso) => ingreso.email === user.email)) return {error:-2, message: 'El email ya fue registrado'};
+            if (baseUsuarios.some((ingreso) =>ingreso.usuario===user.usuario)) return {error:-2, message: 'El nombre de usuario ya fue registrado'};
+            let agregarUsuario = await this.collection.create(user);
+                                 await agregarUsuario.save(); 
+            return {message: "Usuario agregado correctamente!" };
+            
         } catch (error) {
-            return {message: "No se pudo agregar Producto " + error};
+            return {message: "No se pudo agregar usuario con errores " + error};
         }
     }
     async saveCart() {

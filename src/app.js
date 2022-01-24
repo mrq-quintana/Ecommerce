@@ -67,7 +67,7 @@ app.get('/currentUser',(req,res)=>{
     if(req.session.user){
         res.send(req.session.user)
     }else{
-        res.send({error: -2})
+        res.send({error: -2, message: 'Por favor vuelva a iniciar sesion'})
     }
 })
 
@@ -80,8 +80,8 @@ app.post('/api/register', async (req,res)=>{
 
 //LOGIN USUARIO
 app.post('/api/login', async (req,res)=>{
-    let {email,password} = req.body;
-    let user = await usuario.getByUser({email:email,password:password});
+    let loginUsuario = req.body;
+    let user = await usuario.getByUser(loginUsuario);
     if(user.status===200){
         req.session.user={
             username:user.user.usuario,
@@ -89,9 +89,19 @@ app.post('/api/login', async (req,res)=>{
             role:"empleado"
         }
         return res.send({message:'Bienvenido ' + req.session.user.username +' logueado correctamente'})
+    } else {
+        res.send({error: -2, message:'No se ha podido iniciar sesion'})
     }
 })
+//LOGOUT USUARIO
+app.get('api/logout', (req,res)=>{
+    req.session.destroy(error=>{
+        if(error)return res.send({error: "Error de logout"})
+                        res.send({error: "Hasta luego!"})
 
+        
+    })
+})
 //VISTA ARTICULOS
 app.get('/views/articulos',(req,res)=>{
     productos.getAll().then(result=>{
