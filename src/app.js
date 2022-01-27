@@ -10,8 +10,12 @@ import cart from './routes/cart.js'
 import __dirname from './utils.js';
 import {Server} from 'socket.io';
 import ios from 'socket.io-express-session';
+import config from './config.js'; 
+import mongoose  from 'mongoose';
 import passport from 'passport'
 import {initializePassport} from './passport-config.js';
+
+
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
@@ -21,7 +25,7 @@ const PORT = process.env.PORT||8080;
 const server = app.listen(PORT,()=>{console.log("Escuchando en puerto " + PORT)});
 export const io = new Server(server);
 const admin =true;
-
+const connection = mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch((error)=>{console.log("Mongodb se se ha podido conectar");console.log(error)});
 const baseSession = (session({
     store:MongoStore.create({mongoUrl:'mongodb+srv://Maxi:123@ecommerce.dgoa9.mongodb.net/Ecommerce?retryWrites=true&w=majority'}),
     secret:"CoderChat", 
@@ -87,13 +91,14 @@ app.get('/currentUser',(req,res)=>{
 app.post('/api/register',passport.authenticate('register',{failureRedirect:'/api/failedRegister'}),(req,res)=>{ 
     // let user = req.body;
     // let result = await usuario.saveUser(user);
-    res.send({message:'Registro correcto'})
+    res.send(req.body.message)
     
 })
+
 //FALLA DE REGISTRO
 app.post('/api/failedRegister',(req,res)=>{
     console.log('Error de autenticacion')
-    res.send({message:'Error de autenticacion'})
+    res.send({message:'Error de autenticacion'}) 
 })
 //LOGIN USUARIO
 app.post('/api/login', async (req,res)=>{
