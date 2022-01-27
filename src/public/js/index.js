@@ -11,15 +11,17 @@ form.addEventListener('submit',function(event){
         usuario: data.get('username'),
         email: data.get('email'),
         password: data.get('password')
-    }
-//LLAMA A ENDPOINT REGISTRO Y PASA DATOS
+    };console.log(dataUsuario)
     fetch('/api/register',{
         method:"POST",
         body:JSON.stringify(dataUsuario),
         headers:{
             'Content-Type':'application/json'
         }
-    }).then(result=>result.json()).then(json=>{
+    })
+    .then(result=>result.json())
+        .then(json=>
+            {
             if(json.error === -2){
                 Swal.fire({
                     title:'No se puede guardar',

@@ -2,7 +2,7 @@ import express from 'express';
 import {engine} from 'express-handlebars';
 import cors from 'cors';
 import upload from './service/upload.js';
-import {productos, usuario, sesion , mensajes} from './daos/index.js' 
+import {productos, usuario, mensajes} from './daos/index.js' 
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import products from './routes/products.js';
@@ -10,33 +10,36 @@ import cart from './routes/cart.js'
 import __dirname from './utils.js';
 import {Server} from 'socket.io';
 import ios from 'socket.io-express-session';
-
+import passport from 'passport'
+import {initializePassport} from './passport-config.js';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 
 const app = express();
 const PORT = process.env.PORT||8080;
-const server = app.listen(PORT,()=>{
-    console.log("Escuchando en puerto " + PORT)
-});
-
+const server = app.listen(PORT,()=>{console.log("Escuchando en puerto " + PORT)});
+export const io = new Server(server);
+const admin =true;
 
 const baseSession = (session({
     store:MongoStore.create({mongoUrl:'mongodb+srv://Maxi:123@ecommerce.dgoa9.mongodb.net/Ecommerce?retryWrites=true&w=majority'}),
     secret:"CoderChat", 
-    resave:true,
-    cookie:{maxAge:6000},
+    resave:false,
     saveUninitialized:false,
+    cookie:{maxAge:6000},
 }))
 
-export const io = new Server(server);
 
-const admin =true;
-
+//VIEWS
 app.engine('handlebars', engine());
 app.set('views',__dirname+'/viewsHandlebars');
 app.set('view engine','handlebars');
+//JSON
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(cors());
 app.use((req,res,next)=>{
     let timestamp = Date.now();
@@ -46,11 +49,20 @@ app.use((req,res,next)=>{
     next();
     
 })
+//SESION
 app.use(baseSession);
 io.use(ios(baseSession));
+//PASSPORT
+initializePassport(); 
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+//ROUTER
 app.use(express.static(__dirname+'/public'));
 app.use('/api/productos',products);
 app.use('/api/carritos',cart);
+ 
 
 
 //SUBIR IMAGEN
@@ -72,12 +84,17 @@ app.get('/currentUser',(req,res)=>{
 })
 
 //REGISTRO DE USUARIO
-app.post('/api/register', async (req,res)=>{
-    let user = req.body;
-    let result = await usuario.saveUser(user);
-    res.send(result)
+app.post('/api/register',passport.authenticate('register',{failureRedirect:'/api/failedRegister'}),(req,res)=>{ 
+    // let user = req.body;
+    // let result = await usuario.saveUser(user);
+    res.send({message:'Registro correcto'})
+    
 })
-
+//FALLA DE REGISTRO
+app.post('/api/failedRegister',(req,res)=>{
+    console.log('Error de autenticacion')
+    res.send({message:'Error de autenticacion'})
+})
 //LOGIN USUARIO
 app.post('/api/login', async (req,res)=>{
     let loginUsuario = req.body;
