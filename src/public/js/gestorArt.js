@@ -22,7 +22,7 @@ fetch('/currentUser').then(result=>result.json()).then(json=>{
         
     } else{
         let bienvenido = document.getElementById('bienvenido');
-        bienvenido.innerHTML = 'Bienvenido ' + usuario.username;
+        bienvenido.innerHTML = 'Bienvenido ' + usuario.usuario;
         }
     })
     

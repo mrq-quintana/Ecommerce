@@ -21,24 +21,23 @@ form.addEventListener('submit',function(event){
         }
     })
     .then(result=>result.json())
-        .then(json=>console.log(json))
-        //     {
-        //     if(json.error === -2){
-        //         Swal.fire({
-        //             title:'No se puede guardar',
-        //             text:json.message,
-        //             icon:'error',
-        //             timer:4000,
-        //         })
-        //     } else{
-        //         Swal.fire({
-        //             title:'Guardado',
-        //             text:json.message,
-        //             icon:'success',
-        //             timer:5000,
-        //         })
-        //         setTimeout(location.replace('./pages/login.html'),5000);
-        // }
-    // })
+        .then(json=>{
+            if(json.error === -2){
+                Swal.fire({
+                    title:'No se puede guardar',
+                    text:json.message,
+                    icon:'error',
+                    timer:4000,
+                })
+            } else{
+                Swal.fire({
+                    title:'Guardado',
+                    text:json.message,
+                    icon:'success',
+                    timer:5000,
+                })
+                setTimeout(location.replace('./pages/login.html'),5000);
+        }
+    })
     form.reset();
 }) 

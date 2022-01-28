@@ -4,7 +4,7 @@ form.addEventListener('submit',function(event){
     event.preventDefault();
     let data = new FormData(form);
     let loginUsuario ={
-        email: data.get('email'),
+        username: data.get('username'),
         password: data.get('password')
     }
     fetch('/api/login',{

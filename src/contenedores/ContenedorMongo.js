@@ -45,15 +45,10 @@ export default class ContenedorMongo{
     async getBy(usuario){
         try{
             let doc = await this.collection.find({usuario:usuario});
-            if (doc) {
-            return {status:200 ,user:doc[0]};
-            } else {
-            return {status:400, error: -2, user:[], message: "No se pudo loguear "};
-            }
+            if (doc) return doc[0];
         } catch(error){
             return {message: "No se pudo realizar accion " + error};
         }
-  
     }
     //DELETES
     async deleteById(id){
@@ -115,10 +110,9 @@ export default class ContenedorMongo{
     }
     async saveUser(user) {
         try {
-            console.log(user);
             let baseUsuarios = await this.collection.find();
-            if (baseUsuarios.some((ingreso) => ingreso.email === user.email)) return {error:-2, message: 'El email ya fue registrado'};
-            if (baseUsuarios.some((ingreso) =>ingreso.usuario===user.username)) return {error:-2, message: 'El nombre de usuario ya fue registrado'};
+            if (baseUsuarios.some((ingreso) => ingreso.email === user.email)) return {message: 'El email ya fue registrado'};
+            if (baseUsuarios.some((ingreso) =>ingreso.usuario===user.usuario)) return {message: 'El nombre de usuario ya fue registrado'};
             let agregarUsuario = await this.collection.create(user);
                                  await agregarUsuario.save(); 
             return {message: "Usuario agregado correctamente!" };

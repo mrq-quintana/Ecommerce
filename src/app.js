@@ -80,8 +80,8 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
 })
 //SESION USUARIO
 app.get('/currentUser',(req,res)=>{
-    if(req.session.user){
-        res.send(req.session.user)
+    if(req.user){
+        res.send(req.user)
     }else{
         res.send({error: -2, message: 'Por favor vuelva a iniciar sesion'})
     }
@@ -89,10 +89,7 @@ app.get('/currentUser',(req,res)=>{
 
 //REGISTRO DE USUARIO
 app.post('/api/register',passport.authenticate('register',{failureRedirect:'/api/failedRegister'}),(req,res)=>{ 
-    // let user = req.body;
-    // let result = await usuario.saveUser(user);
-    res.send(req.body.message)
-    
+    res.send({message:"Registro correcto"})
 })
 
 //FALLA DE REGISTRO
@@ -101,19 +98,25 @@ app.post('/api/failedRegister',(req,res)=>{
     res.send({message:'Error de autenticacion'}) 
 })
 //LOGIN USUARIO
-app.post('/api/login', async (req,res)=>{
-    let loginUsuario = req.body;
-    let user = await usuario.getByUser(loginUsuario);
-    if(user.status===200){
-        req.session.user={
-            username:user.user.usuario,
-            email:user.user.email,
-            role:"empleado"
-        }
-        return res.send({message:'Bienvenido ' + req.session.user.username +' logueado correctamente'})
-    } else {
-        res.send({error: -2, message:'No se ha podido iniciar sesion'})
-    }
+app.post('/api/login',passport.authenticate('login',{failureRedirect:'/api/failedLogin'}), async (req,res)=>{
+    res.send({message:"Login correcto"});
+    // let loginUsuario = req.body;
+    // let user = await usuario.getByUser(loginUsuario);
+    // if(user.status===200){
+    //     req.session.user={
+    //         username:user.user.usuario,
+    //         email:user.user.email,
+    //         role:"empleado"
+    //     }
+    //     return res.send({message:'Bienvenido ' + req.session.user.username +' logueado correctamente'})
+    // } else {
+    //     res.send({error: -2, message:'No se ha podido iniciar sesion'})
+    // }
+})
+//FALLA DE LOGIN
+app.post('/api/failedLogin',(req,res)=>{
+    console.log('Error de Logueo')
+    res.send({message:'Error de Logueo'}) 
 })
 //LOGOUT USUARIO
 app.get('api/logout', (req,res)=>{
