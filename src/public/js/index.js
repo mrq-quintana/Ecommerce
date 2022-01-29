@@ -1,4 +1,3 @@
-
 // TOMA DATOS DEL FORMULARIO DE REGISTRO
 let form  = document.getElementById("registerForm");
 form.addEventListener('submit',function(event){
@@ -12,7 +11,7 @@ form.addEventListener('submit',function(event){
         username: data.get('username'),
         email: data.get('email'),
         password: data.get('password')
-    };
+    }
     fetch('/api/register',{
         method:"POST",
         body:JSON.stringify(dataUsuario),
@@ -21,8 +20,8 @@ form.addEventListener('submit',function(event){
         }
     })
     .then(result=>result.json())
-        .then(json=>{
-            if(json.error === -2){
+    .then(json=>{
+           if(json.error === -2){
                 Swal.fire({
                     title:'No se puede guardar',
                     text:json.message,

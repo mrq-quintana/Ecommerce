@@ -17,13 +17,12 @@ let usuario;
 
 fetch('/currentUser').then(result=>result.json()).then(json=>{ 
     usuario=json;
-    if(json.error === -2){
-        location.replace('/pages/login.html')
-        
+    if(json.error===-2){       
+        location.replace('./login.html')
     } else{
         let bienvenido = document.getElementById('bienvenido');
-        bienvenido.innerHTML = 'Bienvenido ' + usuario.usuario;
-        }
+        bienvenido.innerHTML = 'Bienvenido ' + usuario[0].usuario;
+    }
     })
     
 
@@ -40,7 +39,6 @@ function enviarForm(event){
     }).then(result=>{
         return result.json();
     }).then(json=>{
-        console.log(json.error);
         if(json.error === -2){
             Swal.fire({
                 title:'No se puede guardar',
@@ -89,7 +87,6 @@ input.addEventListener('keyup',(e)=>{
 
 socket.on('log',textos=>{
     let p =document.getElementById('log');
-    console.log(textos)
     let todosMsj = textos.map(message=>{
         return `<div>
                     <span>${message.usuario} dice: ${message.message}, ${message.createdAt}</span>

@@ -80,11 +80,8 @@ app.post('/api/uploadfile',upload.single('image'),(req,res)=>{
 })
 //SESION USUARIO
 app.get('/currentUser',(req,res)=>{
-    if(req.user){
-        res.send(req.user)
-    }else{
-        res.send({error: -2, message: 'Por favor vuelva a iniciar sesion'})
-    }
+    if (req.user) return res.send(req.user);
+    return res.send({error:-2,message:"Session cerrada"})
 })
 
 //REGISTRO DE USUARIO
@@ -93,30 +90,16 @@ app.post('/api/register',passport.authenticate('register',{failureRedirect:'/api
 })
 
 //FALLA DE REGISTRO
-app.post('/api/failedRegister',(req,res)=>{
-    console.log('Error de autenticacion')
-    res.send({message:'Error de autenticacion'}) 
+app.get('/api/failedRegister',(req,res)=>{
+    res.send({error: -2,message:'Error de autenticacion'}) 
 })
 //LOGIN USUARIO
 app.post('/api/login',passport.authenticate('login',{failureRedirect:'/api/failedLogin'}), async (req,res)=>{
     res.send({message:"Login correcto"});
-    // let loginUsuario = req.body;
-    // let user = await usuario.getByUser(loginUsuario);
-    // if(user.status===200){
-    //     req.session.user={
-    //         username:user.user.usuario,
-    //         email:user.user.email,
-    //         role:"empleado"
-    //     }
-    //     return res.send({message:'Bienvenido ' + req.session.user.username +' logueado correctamente'})
-    // } else {
-    //     res.send({error: -2, message:'No se ha podido iniciar sesion'})
-    // }
 })
 //FALLA DE LOGIN
 app.post('/api/failedLogin',(req,res)=>{
-    console.log('Error de Logueo')
-    res.send({message:'Error de Logueo'}) 
+    res.send({error: -2, message:'Error de Logueo'}) 
 })
 //LOGOUT USUARIO
 app.get('api/logout', (req,res)=>{
@@ -150,10 +133,12 @@ io.on('connection', async socket=>{
 
     socket.emit('actualiza', products); 
     socket.on('msj', async data=>{
-        let user = await usuario.getBy(socket.handshake.session.user.username)
+        console.log(data) 
+        console.log(socket.handshake.session.passport.user)
+        let user = await usuario.getBy(socket.handshake.session.user)
         console.log(user)
         let mjs = {
-            user:user.user._id,
+            user:user.user._id,//ACA ESTA EL ERROR 
             usuario:user.user.usuario,
             message: data.message
         }

@@ -24,7 +24,7 @@ export default class ContenedorMongo{
             let doc = await this.collection.find({_id:id});
             
             if (doc.length > 0) {
-            return { product: doc, message: "Id encontrado"};
+            return doc;
             } else {
             return {message: "No se pudo encontrar Id "};
             }
@@ -110,13 +110,9 @@ export default class ContenedorMongo{
     }
     async saveUser(user) {
         try {
-            let baseUsuarios = await this.collection.find();
-            if (baseUsuarios.some((ingreso) => ingreso.email === user.email)) return {message: 'El email ya fue registrado'};
-            if (baseUsuarios.some((ingreso) =>ingreso.usuario===user.usuario)) return {message: 'El nombre de usuario ya fue registrado'};
             let agregarUsuario = await this.collection.create(user);
-                                 await agregarUsuario.save(); 
-            return {message: "Usuario agregado correctamente!" };
-            
+                                 await agregarUsuario.save();
+            return agregarUsuario;   
         } catch (error) {
             return {message: "No se pudo agregar usuario con errores " + error};
         }
@@ -130,7 +126,6 @@ export default class ContenedorMongo{
         }
     }
     async saveMessage(mensajes){
-        console.log(mensajes)
         try {
             let msj = await this.collection.create(mensajes);
                       await msj.save(); 

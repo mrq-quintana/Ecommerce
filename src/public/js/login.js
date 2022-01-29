@@ -13,10 +13,11 @@ form.addEventListener('submit',function(event){
         headers:{
             'Content-Type':'application/json'
         }
-    }).then(result=> result.json()).then(json=>{
+    }).then(result=> result.json()).then(json=>
+        {
         if(json.error===-2){
             Swal.fire({
-                title:'Usuario no registrado',
+                title:'Usuario no denegado',
                 text:json.message,
                 icon:'error',
                 timer:5000,
@@ -28,7 +29,7 @@ form.addEventListener('submit',function(event){
                 icon:'success',
                 timer:5000,
             })
-            setTimeout(location.replace('./gestorArt.html'),7000);
+            location.replace('./gestorArt.html');
         }
     })
     form.reset();

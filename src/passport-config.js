@@ -33,9 +33,6 @@ export const initializePassport = () =>{
     passport.use('login', new LocalStrategy(async(username,password,done)=>{
         try {
             let user = await usuario.getBy(username);
-            console.log(username)
-            console.log(password)
-            console.log(user)
             if(!user)return done(null,false,{message:'Usuario no existe'});
             if(!passwordNoBcrypt(user,password)) return done(null,false,{message:'Password incorrecto'})
             console.log('Logueado');
@@ -46,11 +43,11 @@ export const initializePassport = () =>{
     }))
 
     
-    passport.serializeUser(async(user,done)=>{
-        done(null,user);
+    passport.serializeUser(async (user,done)=>{
+        done(null,user._id);
     })
-    passport.deserializeUser((id,done)=>{
-        usuario.getById(id,done);
-        // usuario.findById(id,done);
+    passport.deserializeUser(async(id,done)=>{
+        let getUser = await usuario.getById(id);
+        done(null,getUser);
     })
 }
