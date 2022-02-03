@@ -1,11 +1,22 @@
 import __dirname from "./utils.js";
- 
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import minimist from 'minimist';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+let argumentos = minimist(process.argv.slice(2));
+
 export default {
+
+    PORT:argumentos.p||8080,
+        
     fileSystem:{
         url:__dirname+'/files/'
     },
-    mongo:{
-        url:'mongodb+srv://Maxi:123@ecommerce.dgoa9.mongodb.net/Ecommerce?retryWrites=true&w=majority'
+    mongo:{ 
+        url:process.env.MONGO_URL
     },
     firebase:{
         "type": "service_account",
@@ -20,3 +31,11 @@ export default {
         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-s1icy%40ecommerce-8868d.iam.gserviceaccount.com"
     }
 }
+
+export const baseSession = (session({
+    store:MongoStore.create({mongoUrl:process.env.MONGO_URL}),
+    secret:process.env.SECRET, 
+    resave:false,
+    saveUninitialized:false,
+    cookie:{maxAge:60000},
+}))

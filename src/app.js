@@ -1,39 +1,29 @@
+//IMPORTS DEPENDENCIAS
 import express from 'express';
 import {engine} from 'express-handlebars';
 import cors from 'cors';
-import upload from './service/upload.js';
-import {productos, usuario, mensajes} from './daos/index.js' 
-import session from "express-session";
-import MongoStore from "connect-mongo";
-import products from './routes/products.js';
-import cart from './routes/cart.js'
-import __dirname from './utils.js';
 import {Server} from 'socket.io';
 import ios from 'socket.io-express-session';
-import config from './config.js'; 
 import mongoose  from 'mongoose';
 import passport from 'passport'
-import {initializePassport} from './passport-config.js';
-
-
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
+//IMPORTS JS
+import upload from './service/upload.js';
+import {productos, usuario, mensajes} from './daos/index.js' 
+import products from './routes/products.js';
+import cart from './routes/cart.js'
+import __dirname from './utils.js';
+import config,{baseSession} from './config.js'; 
+import {initializePassport} from './passport-config.js';
+
+const admin =true;
 
 const app = express();
-const PORT = process.env.PORT||8080;
-const server = app.listen(PORT,()=>{console.log("Escuchando en puerto " + PORT)});
+const server = app.listen(config.PORT,()=>{console.log("Escuchando en puerto " + config.PORT)});
 export const io = new Server(server);
-const admin =true;
 const connection = mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch((error)=>{console.log("Mongodb se se ha podido conectar");console.log(error)});
-const baseSession = (session({
-    store:MongoStore.create({mongoUrl:'mongodb+srv://Maxi:123@ecommerce.dgoa9.mongodb.net/Ecommerce?retryWrites=true&w=majority'}),
-    secret:"CoderChat", 
-    resave:false,
-    saveUninitialized:false,
-    cookie:{maxAge:6000},
-}))
-
 
 //VIEWS
 app.engine('handlebars', engine());

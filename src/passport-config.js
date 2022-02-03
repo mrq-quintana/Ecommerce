@@ -41,8 +41,7 @@ export const initializePassport = () =>{
             done(error)
         }
     }))
-
-    
+  
     passport.serializeUser(async (user,done)=>{
         done(null,user._id);
     })
