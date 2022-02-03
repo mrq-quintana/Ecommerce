@@ -15,15 +15,26 @@ import {productos, usuario, mensajes} from './daos/index.js'
 import products from './routes/products.js';
 import cart from './routes/cart.js'
 import __dirname from './utils.js';
-import config,{baseSession} from './config.js'; 
+import config,{baseSession , argumentos} from './config.js';
 import {initializePassport} from './passport-config.js';
 
 const admin =true;
 
 const app = express();
+
+
+console.log(process.cwd()) //RUTA RELATIVA A RUN DEL PROGRAMA
+console.log(process.pid) //ID DEL PROCESO DE NODE
+console.log(process.version)
+console.log(argumentos)
+console.log(process.execPath)
+console.log(process.platform)   
+console.log(process.memoryUsage().rss)
+
 const server = app.listen(config.PORT,()=>{console.log("Escuchando en puerto " + config.PORT)});
 export const io = new Server(server);
 const connection = mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch((error)=>{console.log("Mongodb se se ha podido conectar");console.log(error)});
+
 
 //VIEWS
 app.engine('handlebars', engine());
@@ -110,6 +121,19 @@ app.get('/views/articulos',(req,res)=>{
         res.render('articulos',infoObj)
     })
 })
+//INFO
+app.get("/api/info", (req, res) => {
+    const info = {
+      argumentos: argumentos,
+      rutaEjecucion: process.execPath,
+      platforma: process.platform,
+      idProceso: process.pid,
+      version: process.version,
+      direccionProyecto: process.cwd(),
+      memoriaReservada: process.memoryUsage().rss,
+    };
+    res.send(info);
+  });
 //RUTA NO AUTORIZAADA
 app.use((req,res,next)=>{
     res.status(404).send({error:-1,message:"La ruta que desea ingresar no existe"})

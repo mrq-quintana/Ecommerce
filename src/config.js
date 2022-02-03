@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-let argumentos = minimist(process.argv.slice(2));
+export let argumentos = minimist(process.argv.slice(2));
 
 export default {
 
@@ -16,7 +16,7 @@ export default {
         url:__dirname+'/files/'
     },
     mongo:{ 
-        url:process.env.MONGO_URL
+        url:process.env.MONGO_URL,
     },
     firebase:{
         "type": "service_account",
