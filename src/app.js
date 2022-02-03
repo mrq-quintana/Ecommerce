@@ -23,17 +23,14 @@ const admin =true;
 const app = express();
 
 
-console.log(process.cwd()) //RUTA RELATIVA A RUN DEL PROGRAMA
-console.log(process.pid) //ID DEL PROCESO DE NODE
-console.log(process.version)
-console.log(argumentos)
-console.log(process.execPath)
-console.log(process.platform)   
-console.log(process.memoryUsage().rss)
 
 const server = app.listen(config.PORT,()=>{console.log("Escuchando en puerto " + config.PORT)});
 export const io = new Server(server);
-const connection = mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch((error)=>{console.log("Mongodb se se ha podido conectar");console.log(error)});
+const connection = mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch(()=>{console.log("Mongodb se se ha podido conectar"),process.exit()});
+
+process.on('uncaughtException',(err)=>{
+    console.log('Captura de error: ', err)
+})
 
 
 //VIEWS
