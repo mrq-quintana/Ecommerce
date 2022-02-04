@@ -8,13 +8,14 @@ import mongoose  from 'mongoose';
 import passport from 'passport'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import {fork} from 'child_process';
 
 //IMPORTS JS
+import __dirname from './utils.js';
 import upload from './service/upload.js';
 import {productos, usuario, mensajes} from './daos/index.js' 
 import products from './routes/products.js';
 import cart from './routes/cart.js'
-import __dirname from './utils.js';
 import config,{baseSession , argumentos} from './config.js';
 import {initializePassport} from './passport-config.js';
 
@@ -26,7 +27,7 @@ const app = express();
 
 const server = app.listen(config.PORT,()=>{console.log("Escuchando en puerto " + config.PORT)});
 export const io = new Server(server);
-const connection = mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch(()=>{console.log("Mongodb se se ha podido conectar"),process.exit()});
+mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch(()=>{console.log("Mongodb se se ha podido conectar"),process.exit()});
 
 process.on('uncaughtException',(err)=>{
     console.log('Captura de error: ', err)
@@ -119,7 +120,7 @@ app.get('/views/articulos',(req,res)=>{
     })
 })
 //INFO
-app.get("/api/info", (req, res) => {
+app.get('/api/info', (req, res) => {
     const info = {
       argumentos: argumentos,
       rutaEjecucion: process.execPath,
@@ -131,6 +132,23 @@ app.get("/api/info", (req, res) => {
     };
     res.send(info);
   });
+
+//RANDOM
+app.get("/api/random", (req, res) => {
+    const cant = parseInt(req.query.cant || 100000000);
+    if (isNaN(cant)) {
+      res.status(400).send({
+        message: "No es un numero",
+      });
+      return;
+    }
+    const random = fork("./src/service/random.js", [cant]);
+    random.on("message", (data) => {
+      res.json({ vueltas: cant, numero: data });
+    });
+  });
+
+
 //RUTA NO AUTORIZAADA
 app.use((req,res,next)=>{
     res.status(404).send({error:-1,message:"La ruta que desea ingresar no existe"})
