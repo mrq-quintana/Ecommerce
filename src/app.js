@@ -9,14 +9,15 @@ import passport from 'passport'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import {fork} from 'child_process';
-
+import core from 'os'
 //IMPORTS JS
 import __dirname from './utils.js';
 import upload from './service/upload.js';
 import {productos, usuario, mensajes} from './daos/index.js' 
 import products from './routes/products.js';
 import cart from './routes/cart.js'
-import config,{baseSession , argumentos} from './config.js';
+import config,{argumentos} from './config.js';
+import { baseSession } from './config.js';
 import {initializePassport} from './passport-config.js';
 
 const admin =true;
@@ -25,9 +26,11 @@ const app = express();
 
 
 
-const server = app.listen(config.PORT,()=>{console.log("Escuchando en puerto " + config.PORT)});
-export const io = new Server(server);
 mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch(()=>{console.log("Mongodb se se ha podido conectar"),process.exit()});
+
+const server = app.listen(config.PORT,()=>{console.log("Escuchando en puerto " + config.PORT)});
+
+export const io = new Server(server);
 
 process.on('uncaughtException',(err)=>{
     console.log('Captura de error: ', err)
@@ -129,6 +132,7 @@ app.get('/api/info', (req, res) => {
       version: process.version,
       direccionProyecto: process.cwd(),
       memoriaReservada: process.memoryUsage().rss,
+      procesadores: core.cpus().length,
     };
     res.send(info);
   });
