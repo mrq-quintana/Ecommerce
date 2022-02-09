@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import {fork} from 'child_process';
 import core from 'os'
+
 //IMPORTS JS
 import __dirname from './utils.js';
 import upload from './service/upload.js';
@@ -23,8 +24,6 @@ import {initializePassport} from './passport-config.js';
 const admin =true;
 
 const app = express();
-
-
 
 mongoose.connect(config.mongo.url,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{console.log("Mongodb esta conectado");}).catch(()=>{console.log("Mongodb se se ha podido conectar"),process.exit()});
 
@@ -139,6 +138,7 @@ app.get('/api/info', (req, res) => {
 
 //RANDOM
 app.get("/api/random", (req, res) => {
+    console.log(`Peticion recibida al worker ${process.pid}`)
     const cant = parseInt(req.query.cant || 100000000);
     if (isNaN(cant)) {
       res.status(400).send({
@@ -146,9 +146,10 @@ app.get("/api/random", (req, res) => {
       });
       return;
     }
-    const random = fork("./src/service/random.js", [cant]);
+    const random = fork("./service/random.js", [cant]);
     random.on("message", (data) => {
       res.json({ vueltas: cant, numero: data });
+      console.log(`Peticion recibida al worker ${process.pid} finalizada`)
     });
   });
 

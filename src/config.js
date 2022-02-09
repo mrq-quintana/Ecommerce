@@ -11,7 +11,7 @@ export let argumentos = minimist(process.argv.slice(2));
 export default {
 
     PORT:argumentos.p||8080,
-        
+      
     fileSystem:{
         url:__dirname+'/files/'
     },
